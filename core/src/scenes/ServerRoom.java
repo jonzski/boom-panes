@@ -1,38 +1,26 @@
 package scenes;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
-import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
-import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.viewport.FitViewport;
-import game.BoomPanes;
-import jdk.javadoc.internal.doclets.formats.html.markup.Text;
+import game.App;
+import scenes.GameScreen;
+import utils.ScreenManager;
 
-public class ServerRoom extends ScreenAdapter {
 
-    private final BoomPanes game;
-    private final Stage stage;
+public class ServerRoom extends GameScreen {
+
     private final Skin skin;
 
-    public ServerRoom(BoomPanes game) {
-        this.game = game;
-        SpriteBatch batch = game.getSpriteBatch();
-        this.stage = new Stage(new FitViewport(1280, 720), batch);
+    public ServerRoom(final App app) {
+        super(app);
 
         // Create a simple default skin
         skin = new Skin();
@@ -47,6 +35,11 @@ public class ServerRoom extends ScreenAdapter {
 
         // Add the button style to the skin
         skin.add("default", buttonStyle);
+    }
+
+    @Override
+    public void update(float delta) {
+
     }
 
     @Override
@@ -88,7 +81,7 @@ public class ServerRoom extends ScreenAdapter {
         quitButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new MainMenu(game)); // Switch to SinglePlayerScreen
+                app.gsm.setScreen(ScreenManager.STATE.MAIN_MENU);
             }
         });
 
@@ -96,7 +89,7 @@ public class ServerRoom extends ScreenAdapter {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 // Handle VS button click
-                game.setScreen(new BattleRoom(game));
+                app.gsm.setScreen((ScreenManager.STATE.BATTLE));
             }
         });
 
@@ -124,6 +117,16 @@ public class ServerRoom extends ScreenAdapter {
     @Override
     public void resize(int width, int height) {
         stage.getViewport().update(width, height, true);
+    }
+
+    @Override
+    public void pause() {
+
+    }
+
+    @Override
+    public void resume() {
+
     }
 
     @Override

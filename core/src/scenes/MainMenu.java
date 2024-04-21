@@ -1,33 +1,24 @@
 package scenes;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.viewport.FitViewport;
-import game.BoomPanes;
+import game.App;
+import utils.ScreenManager;
 
-public class MainMenu extends ScreenAdapter {
-
-    private final BoomPanes game;
-    private final Stage stage;
+public class MainMenu extends GameScreen {
     private final Skin skin;
 
-    public MainMenu(BoomPanes game) {
-        this.game = game;
-        SpriteBatch batch = game.getSpriteBatch();
-        this.stage = new Stage(new FitViewport(1280, 720), batch);
+    public MainMenu(final App app) {
+        super(app);
 
-        // Create a simple default skin
         skin = new Skin();
 
         // Create a font for the buttons
@@ -72,23 +63,21 @@ public class MainMenu extends ScreenAdapter {
         singlePlayerButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new SinglePlayer(game)); // Switch to SinglePlayerScreen
+                app.gsm.setScreen(ScreenManager.STATE.SINGLE);
             }
         });
 
         battleButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                // Handle VS button click
-                game.setScreen(new ServerRoom(game));
+               app.gsm.setScreen(ScreenManager.STATE.LOBBY);
             }
         });
 
         settingsButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                // Handle Settings button click
-//                game.setScreen(new Settings(game));
+              app.gsm.setScreen(ScreenManager.STATE.SETTING);
             }
         });
 
@@ -110,27 +99,30 @@ public class MainMenu extends ScreenAdapter {
     }
 
     @Override
-    public void render(float delta) {
-        Gdx.gl.glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+    public void update(float delta) {
 
-        stage.act(delta);
+    }
+
+    @Override
+    public void render(float delta) {
+        Gdx.gl.glClearColor(0f, 0f, 0f, 0);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.draw();
     }
 
     @Override
-    public void resize(int width, int height) {
-        stage.getViewport().update(width, height, true);
+    public void pause() {
+
+    }
+
+    @Override
+    public void resume() {
+
     }
 
     @Override
     public void hide() {
-        dispose();
+
     }
 
-    @Override
-    public void dispose() {
-        stage.dispose();
-        skin.dispose(); // Dispose the skin when done
-    }
 }

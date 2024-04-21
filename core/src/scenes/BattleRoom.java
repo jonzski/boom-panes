@@ -20,18 +20,15 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import game.App;
 import game.BoomPanes;
 
-public class BattleRoom extends ScreenAdapter {
+public class BattleRoom extends GameScreen {
 
-    private final BoomPanes game;
-    private final Stage stage;
     private final Skin skin;
 
-    public BattleRoom(BoomPanes game) {
-        this.game = game;
-        SpriteBatch batch = game.getSpriteBatch();
-        this.stage = new Stage(new FitViewport(1280, 720), batch);
+    public BattleRoom(final App app) {
+        super(app);
 
         // Create a simple default skin
         skin = new Skin();
@@ -66,6 +63,11 @@ public class BattleRoom extends ScreenAdapter {
     }
 
     @Override
+    public void update(float delta) {
+
+    }
+
+    @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -77,6 +79,16 @@ public class BattleRoom extends ScreenAdapter {
     @Override
     public void resize(int width, int height) {
         stage.getViewport().update(width, height, true);
+    }
+
+    @Override
+    public void pause() {
+
+    }
+
+    @Override
+    public void resume() {
+
     }
 
     @Override

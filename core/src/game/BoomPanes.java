@@ -1,21 +1,16 @@
 package game;
 
-import com.badlogic.gdx.Game;
+import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import scenes.MainMenu;
 
-public class BoomPanes extends Game {
+public class BoomPanes extends ApplicationAdapter {
 
 	private SpriteBatch batch;
-
-	public SpriteBatch getSpriteBatch() {
-		return batch;
-	}
 
 	@Override
 	public void create() {
 		batch = new SpriteBatch();
-		setScreen(new MainMenu(this));
 	}
 
 	@Override
