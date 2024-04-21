@@ -87,6 +87,7 @@ public class MainMenu extends ScreenAdapter {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 // Handle Settings button click
+
             }
         });
 

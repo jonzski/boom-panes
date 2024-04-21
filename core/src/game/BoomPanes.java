@@ -3,21 +3,19 @@ package game;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import scenes.MainMenu;
-import scenes.ServerRoom;
 
 public class BoomPanes extends Game {
 
+	private SpriteBatch batch;
 
-	public final String TITLE = "Boom Panes";
-
-	@Override
-	public void create() {
-		setScreen(new ServerRoom(this));
+	public SpriteBatch getSpriteBatch() {
+		return batch;
 	}
 
 	@Override
-	public void dispose() {
-		super.dispose();
+	public void create() {
+		batch = new SpriteBatch();
+		setScreen(new MainMenu(this));
 	}
 
 	@Override
@@ -26,17 +24,8 @@ public class BoomPanes extends Game {
 	}
 
 	@Override
-	public void resize(int width, int height) {
-		super.resize(width, height);
+	public void dispose() {
+		batch.dispose();
 	}
 
-	@Override
-	public void pause() {
-		super.pause();
-	}
-
-	@Override
-	public void resume() {
-		super.resume();
-	}
 }
