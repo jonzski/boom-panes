@@ -21,15 +21,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import game.BoomPanes;
-import jdk.javadoc.internal.doclets.formats.html.markup.Text;
 
-public class ServerRoom extends ScreenAdapter {
+public class BattleRoom extends ScreenAdapter {
 
     private final BoomPanes game;
     private final Stage stage;
     private final Skin skin;
 
-    public ServerRoom(BoomPanes game) {
+    public BattleRoom(BoomPanes game) {
         this.game = game;
         SpriteBatch batch = game.getSpriteBatch();
         this.stage = new Stage(new FitViewport(1280, 720), batch);
@@ -56,56 +55,10 @@ public class ServerRoom extends ScreenAdapter {
             setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         }});
 
-        // Caption Box
         stage.addActor(new Image(new Texture("caption-box.png")) {{
             setSize(Gdx.graphics.getWidth(), 64);
             setPosition(0, 0);
         }});
-
-        // Header Box
-        stage.addActor(new Image(new Texture("Rectangle 1.png")) {{
-            setSize(Gdx.graphics.getWidth(), 128);
-            setPosition(0, 500);
-        }});
-
-
-        // Add buttons
-        TextButton quitButton = new TextButton("QUIT", skin);
-        TextButton startButton = new TextButton("READY", skin);
-        TextButton waitButton = new TextButton("Waiting for host to start...", skin);
-        TextButton roomName = new TextButton("Player 1's Room", skin);
-
-        // Add texts
-
-
-        // Set button positions
-        quitButton.setPosition(50, 25);
-        startButton.setPosition(1150, 25);
-        waitButton.setPosition(500, 25);
-        roomName.setPosition(50, 560);
-
-        // Add listeners to buttons
-        quitButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new MainMenu(game)); // Switch to SinglePlayerScreen
-            }
-        });
-
-        startButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                // Handle VS button click
-                game.setScreen(new BattleRoom(game));
-            }
-        });
-
-
-        // Add buttons to stage
-        stage.addActor(quitButton);
-        stage.addActor(startButton);
-        stage.addActor(waitButton);
-        stage.addActor(roomName);
 
 
         // Set input processor
