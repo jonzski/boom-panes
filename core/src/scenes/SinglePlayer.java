@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -49,59 +50,26 @@ public class SinglePlayer extends ScreenAdapter {
         skin.add("default", buttonStyle);
     }
 
+    public void addAnActor(String pathname, int width, int height, int x, int y) {
+        stage.addActor(new Image(new Texture(pathname)) {{
+            setSize(width, height);
+            setPosition(x, y);
+        }});
+    }
+
     @Override
     public void show() {
-        // Background
-        stage.addActor(new Image(new Texture("main-menu-bg.png")) {{
-            setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        }});
+        addAnActor("main-menu-bg.png", Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), 0, 0);    // Main Menu Background
+        addAnActor("clock-svgrepo-com 1.png", Gdx.graphics.getWidth()-500, Gdx.graphics.getHeight()-300, 300, 0);   // Clock
+        addAnActor("caption-box.png", Gdx.graphics.getWidth(), 64, 0, 0);   // Caption Box
+        addAnActor("Rectangle 1.png", Gdx.graphics.getWidth(), 128, 0, 550);    // Header Box
 
-        // Clock Background Detail
-        stage.addActor(new Image(new Texture("clock-svgrepo-com 1.png")) {{
-            setSize(Gdx.graphics.getWidth()-500, Gdx.graphics.getHeight()-300);
-            setPosition(300, 0);
-        }});
-
-
-        // Caption Box
-        stage.addActor(new Image(new Texture("caption-box.png")) {{
-            setSize(Gdx.graphics.getWidth(), 64);
-            setPosition(0, 0);
-        }});
-
-        // Header Box
-        stage.addActor(new Image(new Texture("Rectangle 1.png")) {{
-            setSize(Gdx.graphics.getWidth(), 128);
-            setPosition(0, 550);
-        }});
-
-        // Option
-        stage.addActor(new Image(new Texture("options/Player.png")) {{
-            setSize(Gdx.graphics.getWidth()-300, 64);
-            setPosition(400, 400);
-        }});
-
-        stage.addActor(new Image(new Texture("options/Sets.png")) {{
-            setSize(Gdx.graphics.getWidth()-500, 54);
-            setPosition(500, 325);
-        }});
-
-        stage.addActor(new Image(new Texture("options/Difficulty.png")) {{
-            setSize(Gdx.graphics.getWidth()-500, 54);
-            setPosition(500, 250);
-        }});
-
-        stage.addActor(new Image(new Texture("options/Duration.png")) {{
-            setSize(Gdx.graphics.getWidth()-500, 54);
-            setPosition(500, 175);
-        }});
-
-        stage.addActor(new Image(new Texture("options/Lives.png")) {{
-            setSize(Gdx.graphics.getWidth()-500, 54);
-            setPosition(500, 100);
-        }});
-
-
+        // Options
+        addAnActor("options/Player.png", Gdx.graphics.getWidth()-300, 64, 400, 400);
+        addAnActor("options/Sets.png", Gdx.graphics.getWidth()-500, 54, 500, 325);
+        addAnActor("options/Difficulty.png", Gdx.graphics.getWidth()-500, 54, 500, 250);
+        addAnActor("options/Duration.png", Gdx.graphics.getWidth()-500, 54, 500, 175);
+        addAnActor("options/Lives.png", Gdx.graphics.getWidth()-500, 54, 500, 100);
 
         // Add buttons
         TextButton quitButton = new TextButton("QUIT", skin);
