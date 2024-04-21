@@ -1,24 +1,27 @@
 package classes;
 
 public class Bomb {
-    private String hintLetter;
+    private final String hintLetter;
     private String answeredWord;
     private boolean isExploded;
     private int explosionCooldown;
 
-    public Bomb(String hintLetter, String answeredWord, boolean isExploded, int explosionCooldown){
+    public Bomb(String hintLetter, boolean isExploded, int explosionCooldown){
         this.hintLetter = hintLetter;
-        this.answeredWord = answeredWord;
         this.isExploded = false;
         this.explosionCooldown = explosionCooldown;
     }
 
-    public String getBufferLetter() {
-        return hintLetter;
+    public void checkAnswer(String answeredWord){
+
     }
 
-    public void setBufferLetter(String hintLetter) {
-        this.hintLetter = hintLetter;
+    public void setAnsweredWord(String answeredWord){
+        this.answeredWord = answeredWord;
+    }
+
+    public String getHintLetter() {
+        return hintLetter;
     }
 
     public int getExplosionCooldown() {
@@ -36,6 +39,13 @@ public class Bomb {
     public String getAnsweredWord() {
         return answeredWord;
     }
+
+    public void updateCooldownAndExplode() {
+        if (explosionCooldown > 0) {
+            explosionCooldown--; // Decrement the cooldown
+            if (explosionCooldown == 0) {
+                explode();
+            }
+        }
+    }
 }
-
-
