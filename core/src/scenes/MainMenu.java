@@ -29,6 +29,8 @@ public class MainMenu extends GameScreen {
         // Create a font for the buttons
         BitmapFont font = new BitmapFont();
 
+        font.getData().setScale(2);
+
         // Set up the button style
         TextButton.TextButtonStyle buttonStyle = new TextButton.TextButtonStyle();
         buttonStyle.font = font;
@@ -45,6 +47,36 @@ public class MainMenu extends GameScreen {
         captionBox.addCaptionBox("caption-box.png", Gdx.graphics.getWidth(), 64, 0, 0);
         captionBox.insertCaptionBox("Main Menu",  (float) Gdx.graphics.getWidth() /2 , (float) 16);
 
+        stage.addActor(new Image(new Texture("mainmenu.png")) {{
+            setSize(Gdx.graphics.getWidth(), 140);
+            setPosition(0, 540);
+        }});
+
+        stage.addActor(new Image(new Texture("bomb.png")) {{
+            setSize(650, 650);
+            setPosition(-100, 0);
+        }});
+
+        stage.addActor(new Image(new Texture("button1.png")) {{
+            setSize(600, 70);
+            setPosition(700, 400);
+        }});
+
+        stage.addActor(new Image(new Texture("button2.png")) {{
+            setSize(600, 70);
+            setPosition(700, 320);
+        }});
+
+        stage.addActor(new Image(new Texture("button3.png")) {{
+            setSize(600, 70);
+            setPosition(700, 240);
+        }});
+
+        stage.addActor(new Image(new Texture("button4.png")) {{
+            setSize(600, 70);
+            setPosition(700, 160);
+        }});
+
 
         // Add buttons
         TextButton singlePlayerButton = new TextButton("Single Player", skin);
@@ -53,10 +85,11 @@ public class MainMenu extends GameScreen {
         TextButton exitButton = new TextButton("Exit", skin);
 
         // Set button positions
-        singlePlayerButton.setPosition(100, 300);
-        battleButton.setPosition(100, 250);
-        settingsButton.setPosition(100, 200);
-        exitButton.setPosition(100, 150);
+        singlePlayerButton.setPosition(800, 420);
+        battleButton.setPosition(800, 340);
+        settingsButton.setPosition(800, 260);
+        exitButton.setPosition(800, 180);
+
 
         // Add listeners to buttons
         singlePlayerButton.addListener(new ClickListener() {
