@@ -1,5 +1,6 @@
 package scenes;
 
+import classes.Health;
 import classes.Player;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -11,7 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import components.*;
-import classes.Player;
 import game.App;
 import utils.ScreenManager;
 
@@ -25,8 +25,7 @@ public class BattleRoom extends GameScreen {
     private final CaptionBox captionBox = new CaptionBox(stage);
     private final Button buttons = new Button(stage);
     private final int  numberOfPlayers = 4;
-    private final int health = 3;
-    private final String difficulty = "Easy";
+    private final int health = 4;
     private final int coolDown = 5;
 
     private final List<Player> players = new ArrayList<>();
@@ -34,11 +33,10 @@ public class BattleRoom extends GameScreen {
     public BattleRoom(final App app) {
         super(app);
 
-        skin = new Skin();
-
         BitmapFont font = new BitmapFont();
 
-        // Set up the button style
+        skin = new Skin();
+
         TextButton.TextButtonStyle buttonStyle = new TextButton.TextButtonStyle();
         buttonStyle.font = font;
         buttonStyle.fontColor = Color.WHITE;
@@ -52,13 +50,19 @@ public class BattleRoom extends GameScreen {
         for (int i = 0; i < numberOfPlayers; i++) {
             Player player = new Player(health, "Player " + (i + 1), true);
             players.add(player);
-            System.out.println(player);
             stage.addActor(player.getPlayerImage());
+            for (Health health : player.getHearts()) {
+                stage.addActor(health);
+            }
         }
     }
 
     @Override
     public void show() {
+        // Clear existing players and stage
+        players.clear();
+        stage.clear();
+
         // Background
         backgroundComponent.addBackgroundImage("battleroom-bg.png", Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         captionBox.insertCaptionBox("Main Menu", 0,0);
@@ -80,33 +84,33 @@ public class BattleRoom extends GameScreen {
     }
 
     private void placePlayersOnCircle() {
-        // Center of the circle
-        float centerX = (float) Gdx.graphics.getWidth() / 2;
+        float centerX = (float) Gdx.graphics.getWidth() / 3;
         float centerY = (float) Gdx.graphics.getHeight() / 2;
 
-        // Radius of the circle
-        float radius = Math.min(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()) * 0.4f;
+        float maxRadius = Math.min(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()) * 0.4f;
 
-        // Calculate the angle between each player
-        float angleStep = 360f / numberOfPlayers;
+        int maxPlayers = (int) (2 * Math.PI * maxRadius / 48);
 
-        // Starting angle
+        int numPlayers = Math.min(numberOfPlayers, maxPlayers);
+
+        float radius = maxRadius / 2 * (1 / MathUtils.cosDeg((float) 180 / numPlayers));
+
+        float angleStep = 360f / numPlayers;
+
         float currentAngle = 0f;
 
-        // Iterate through each player and position them on the circle
-        for (int i = 0; i < numberOfPlayers; i++) {
-            // Calculate player position on the circle
+        for (int i = 0; i < numPlayers; i++) {
             float playerX = centerX + radius * MathUtils.cosDeg(currentAngle);
             float playerY = centerY + radius * MathUtils.sinDeg(currentAngle);
 
-            // Set player position
             Player player = players.get(i);
             player.setPosition(playerX, playerY);
+            player.updateHealthImagePosition();
 
-            // Increment the angle for the next player
             currentAngle += angleStep;
         }
     }
+
 
     @Override
     public void update(float delta) {
@@ -120,8 +124,8 @@ public class BattleRoom extends GameScreen {
 
         stage.act(delta);
         stage.draw();
-    }
 
+    }
 
     public void rotatePlayer(){
 
@@ -139,13 +143,17 @@ public class BattleRoom extends GameScreen {
 
     @Override
     public void hide() {
+        players.clear();
+        stage.clear();
+
         app.gsm.setAllowBackNavigation(true);
     }
 
     @Override
     public void dispose() {
+        // Dispose existing stage and skin
         stage.dispose();
-        skin.dispose(); // Dispose the skin when done
+        skin.dispose();
     }
 
 }

@@ -1,30 +1,13 @@
 package classes;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
-public class Health {
-    private int health;
-    private Image healthImg;
-    public static int MAXHEALTH = 5;
+public class Health extends Image {
 
-    public Health(int health) {
-        this.health = health;
-    }
-
-    public int getHealth() {
-        return health;
-    }
-
-    public void setHealth(int health) {
-        this.health = health;
-    }
-
-    public Image getHealthImg() {
-        return healthImg;
-    }
-
-    public void reduceHealth() {
-        health -= 1;
+    public Health(float x, float y) {
+        super(new Texture("health.png")); // Assuming you have a heart image file
+        setPosition(x, y);
     }
 
 }
