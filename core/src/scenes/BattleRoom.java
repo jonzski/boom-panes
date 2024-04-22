@@ -1,31 +1,22 @@
 package scenes;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
-import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
-import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.viewport.FitViewport;
+import components.CaptionBox;
 import game.App;
-import game.BoomPanes;
+import components.Background;
 
 public class BattleRoom extends GameScreen {
 
     private final Skin skin;
+    private final Background backgroundComponent = new Background(stage);
+    private final CaptionBox captionBox = new CaptionBox(stage);
 
     public BattleRoom(final App app) {
         super(app);
@@ -44,19 +35,14 @@ public class BattleRoom extends GameScreen {
         // Add the button style to the skin
         skin.add("default", buttonStyle);
     }
+    
+
 
     @Override
     public void show() {
         // Background
-        stage.addActor(new Image(new Texture("main-menu-bg.png")) {{
-            setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        }});
-
-        stage.addActor(new Image(new Texture("caption-box.png")) {{
-            setSize(Gdx.graphics.getWidth(), 64);
-            setPosition(0, 0);
-        }});
-
+        backgroundComponent.addBackgroundImage("main-menu-bg.png", Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        captionBox.addCaptionBox("caption-box.png", Gdx.graphics.getWidth(), 64, 0, 0);
 
         // Set input processor
         Gdx.input.setInputProcessor(stage);
@@ -74,6 +60,11 @@ public class BattleRoom extends GameScreen {
 
         stage.act(delta);
         stage.draw();
+    }
+
+
+    public void rotatePlayer(){
+
     }
 
     @Override

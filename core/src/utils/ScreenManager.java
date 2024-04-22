@@ -1,16 +1,15 @@
 package utils;
 
-import java.awt.*;
-import java.util.HashMap;
+import java.util.EnumMap;
 import game.App;
 import scenes.*;
-
 
 public class ScreenManager {
 
     public final App app;
 
-    private HashMap<STATE, GameScreen> gameScreens;
+    private final EnumMap<STATE, GameScreen> gameScreens;
+    private boolean allowBackNavigation;
 
     public enum STATE {
         SINGLE,
@@ -22,33 +21,35 @@ public class ScreenManager {
 
     public ScreenManager(final App app) {
         this.app = app;
+        this.allowBackNavigation = true; // Initially allow backward navigation
+        this.gameScreens = new EnumMap<>(STATE.class); // Use EnumMap for better performance
         initGameScreens();
         setScreen(STATE.MAIN_MENU);
     }
 
     private void initGameScreens() {
-        this.gameScreens = new HashMap<STATE, GameScreen>();
         this.gameScreens.put(STATE.SINGLE, new SinglePlayer(app));
         this.gameScreens.put(STATE.BATTLE, new BattleRoom(app));
         this.gameScreens.put(STATE.MAIN_MENU, new MainMenu(app));
         this.gameScreens.put(STATE.LOBBY, new ServerRoom(app));
     }
 
+    public void setAllowBackNavigation(boolean allowBackNavigation) {
+        this.allowBackNavigation = allowBackNavigation;
+    }
+
     public void setScreen(STATE nextScreen) {
+        if (!allowBackNavigation && nextScreen != STATE.MAIN_MENU) {
+            return; // Prevent backward navigation if not allowed
+        }
         app.setScreen(gameScreens.get(nextScreen));
     }
 
     public void dispose() {
-        for (GameScreen screen : gameScreens.values()) {
-            if (screen != null) {
-                screen.dispose();
-            }
-        }
+        gameScreens.values().forEach(GameScreen::dispose);
     }
 
     public void reset() {
-        this.gameScreens.remove(STATE.BATTLE);
-        this.gameScreens.put(STATE.BATTLE, new BattleRoom(app));
+        gameScreens.put(STATE.BATTLE, new BattleRoom(app)); // Just replace the existing BattleRoom instance
     }
-
 }

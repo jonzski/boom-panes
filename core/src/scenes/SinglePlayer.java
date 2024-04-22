@@ -4,37 +4,30 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.viewport.FitViewport;
+import components.Background;
+import components.CaptionBox;
 import game.App;
-import game.BoomPanes;
 import utils.ScreenManager;
 
 public class SinglePlayer extends GameScreen {
-
     private final Skin skin;
+    private final Background backgroundComponent = new Background(stage);
+    private final CaptionBox captionBox = new CaptionBox(stage);
+
 
     public SinglePlayer(final App app) {
         super(app);
-
-        // Create a simple default skin
         skin = new Skin();
-
-        // Create a font for the buttons
         BitmapFont font = new BitmapFont();
-
-        // Set up the button style
         TextButton.TextButtonStyle buttonStyle = new TextButton.TextButtonStyle();
         buttonStyle.font = font;
         buttonStyle.fontColor = Color.WHITE;
-
-        // Add the button style to the skin
         skin.add("default", buttonStyle);
     }
 
@@ -47,7 +40,7 @@ public class SinglePlayer extends GameScreen {
 
     @Override
     public void update(float delta) {
-
+        // Update logic here if needed
     }
 
     @Override
@@ -70,9 +63,6 @@ public class SinglePlayer extends GameScreen {
         TextButton waitButton = new TextButton("Please select number of players", skin);
         TextButton roomName = new TextButton("Single Player", skin);
 
-        // Add texts
-
-
         // Set button positions
         quitButton.setPosition(50, 25);
         startButton.setPosition(1150, 25);
@@ -90,19 +80,15 @@ public class SinglePlayer extends GameScreen {
         startButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                // Handle VS button click
-                app.gsm.setScreen((ScreenManager.STATE.BATTLE));
+                app.gsm.setScreen(ScreenManager.STATE.BATTLE);
             }
         });
-
 
         // Add buttons to stage
         stage.addActor(quitButton);
         stage.addActor(startButton);
         stage.addActor(waitButton);
         stage.addActor(roomName);
-
-
 
         // Set input processor
         Gdx.input.setInputProcessor(stage);
@@ -112,14 +98,8 @@ public class SinglePlayer extends GameScreen {
     public void render(float delta) {
         Gdx.gl.glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
         stage.act(delta);
         stage.draw();
-    }
-
-    @Override
-    public void resize(int width, int height) {
-        stage.getViewport().update(width, height, true);
     }
 
     @Override
@@ -134,13 +114,12 @@ public class SinglePlayer extends GameScreen {
 
     @Override
     public void hide() {
-        dispose();
+        app.gsm.setAllowBackNavigation(true); // Allow back navigation when hiding the screen
     }
 
     @Override
     public void dispose() {
-        stage.dispose();
-        skin.dispose(); // Dispose the skin when done
+        super.dispose();
+        skin.dispose();
     }
-
 }

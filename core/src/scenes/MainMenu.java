@@ -10,11 +10,16 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import components.Background;
+import components.CaptionBox;
 import game.App;
 import utils.ScreenManager;
 
 public class MainMenu extends GameScreen {
     private final Skin skin;
+    private final Background backgroundComponent = new Background(stage);
+    private final CaptionBox captionBox = new CaptionBox(stage);
+
 
     public MainMenu(final App app) {
         super(app);
@@ -36,15 +41,8 @@ public class MainMenu extends GameScreen {
     @Override
     public void show() {
         // Background
-        stage.addActor(new Image(new Texture("main-menu-bg.png")) {{
-            setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        }});
-
-        // Caption Box
-        stage.addActor(new Image(new Texture("caption-box.png")) {{
-            setSize(Gdx.graphics.getWidth(), 64);
-            setPosition(0, 0);
-        }});
+        backgroundComponent.addBackgroundImage("main-menu-bg.png", Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        captionBox.addCaptionBox("caption-box.png", Gdx.graphics.getWidth(), 64, 0, 0);
 
 
         // Add buttons
@@ -122,7 +120,13 @@ public class MainMenu extends GameScreen {
 
     @Override
     public void hide() {
+        app.gsm.setAllowBackNavigation(true); // Allow back navigation when hiding the screen
+    }
 
+    @Override
+    public void dispose() {
+        super.dispose();
+        skin.dispose();
     }
 
 }
