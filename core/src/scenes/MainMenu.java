@@ -43,6 +43,7 @@ public class MainMenu extends GameScreen {
         // Background
         backgroundComponent.addBackgroundImage("main-menu-bg.png", Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         captionBox.addCaptionBox("caption-box.png", Gdx.graphics.getWidth(), 64, 0, 0);
+        captionBox.insertCaptionBox("Main Menu",  (float) Gdx.graphics.getWidth() /2 , (float) 16);
 
 
         // Add buttons
