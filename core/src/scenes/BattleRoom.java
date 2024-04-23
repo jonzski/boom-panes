@@ -54,6 +54,7 @@ public class BattleRoom extends GameScreen {
             for (Health health : player.getHearts()) {
                 stage.addActor(health);
             }
+            stage.addActor(player.getNameLabel());
         }
     }
 
@@ -105,7 +106,8 @@ public class BattleRoom extends GameScreen {
 
             Player player = players.get(i);
             player.setPosition(playerX, playerY);
-            player.updateHealthImagePosition();
+            player.placeHeart();
+            player.placeLabel();
 
             currentAngle += angleStep;
         }

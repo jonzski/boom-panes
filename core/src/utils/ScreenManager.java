@@ -17,7 +17,7 @@ public class ScreenManager {
         SETTING,
         LOBBY,
         MAIN_MENU
-    }
+    }   
 
     public ScreenManager(final App app) {
         this.app = app;

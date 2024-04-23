@@ -5,6 +5,7 @@ public class Bomb {
     private String answeredWord;
     private boolean isExploded;
     private int explosionCooldown;
+    private int finalImage;
 
     public Bomb(String hintLetter, boolean isExploded, int explosionCooldown){
         this.hintLetter = hintLetter;
