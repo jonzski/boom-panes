@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import components.*;
 import game.App;
 import utils.ScreenManager;
+import java.util.Random;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +49,7 @@ public class BattleRoom extends GameScreen {
 
     private void initializePlayers() {
         for (int i = 0; i < numberOfPlayers; i++) {
-            Player player = new Player(health, "Player " + (i + 1), true);
+            Player player = new Player(health, "Player " + (i + 1), false);
             players.add(player);
             stage.addActor(player.getPlayerImage());
             for (Health health : player.getHearts()) {
@@ -125,6 +126,31 @@ public class BattleRoom extends GameScreen {
         stage.act(delta);
         stage.draw();
 
+//         simulate random players not answering
+        while(players.size() > 1) {
+            try {
+                // Sleep for 2 seconds
+                Thread.sleep(2000); // Sleep for 5000 milliseconds (5 seconds)
+            } catch (InterruptedException e) {
+                // Handle the InterruptedException, if needed
+                e.printStackTrace();
+            }
+            Random rand = new Random();
+            int randomIndex = rand.nextInt(players.size());
+            Player loseLife = players.get(randomIndex);
+            System.out.println(loseLife.getName() + " lost a life...");
+            loseLife.reducePlayerHealth();
+            if (loseLife.getStatus()){
+                System.out.println(loseLife.getName() + " died!");
+                players.remove(randomIndex);
+            }
+        }
+
+        if(players.size() == 1) {
+            System.out.println(players.get(0).getName() + " won!");
+            app.gsm.setScreen(ScreenManager.STATE.SINGLE);
+
+        }
     }
 
     public void rotatePlayer(){

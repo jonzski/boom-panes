@@ -57,6 +57,9 @@ public class Player {
         if (this.healthValue < 0) {
             this.healthValue = 0; // Ensure health doesn't go below zero
         }
+        if (this.healthValue == 0) {
+            this.status = true;
+        }
     }
 
     public String getName() {
