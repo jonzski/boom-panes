@@ -45,11 +45,35 @@ public class ScreenManager {
         app.setScreen(gameScreens.get(nextScreen));
     }
 
+    public void setSinglePlayer(STATE nextScreen, int numberOfPlayers, int health, int coolDown, int difficulty) {
+        if (!allowBackNavigation && nextScreen != STATE.MAIN_MENU) {
+            return; // Prevent backward navigation if not allowed
+        }
+        BattleRoom battle = (BattleRoom) gameScreens.get(STATE.BATTLE);
+        battle.setNumberOfPlayers(numberOfPlayers);
+        battle.setHealth(health);
+        battle.setCoolDown(coolDown);
+        battle.setDifficulty(difficulty);
+        app.setScreen(gameScreens.get(nextScreen));
+    }
+
+//    public void setLobby(STATE nextScreen, int numberOfPlayers, int health, int coolDown) {
+//        if (!allowBackNavigation && nextScreen != STATE.MAIN_MENU) {
+//            return; // Prevent backward navigation if not allowed
+//        }
+//        ServerRoom lobby = (ServerRoom) gameScreens.get(STATE.LOBBY);
+//        lobby.setNumberOfPlayers(numberOfPlayers);
+//        lobby.setHealth(health);
+//        lobby.setCoolDown(coolDdown);
+//        app.setScreen(gameScreens.get(nextScreen));
+//
+
+
     public void dispose() {
         gameScreens.values().forEach(GameScreen::dispose);
     }
 
     public void reset() {
-        gameScreens.put(STATE.BATTLE, new BattleRoom(app)); // Just replace the existing BattleRoom instance
+
     }
 }

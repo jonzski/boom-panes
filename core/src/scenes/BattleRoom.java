@@ -1,8 +1,8 @@
 package scenes;
 
 import classes.Bomb;
-import classes.Health;
 import classes.Player;
+import classes.Bot;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -18,7 +18,6 @@ import components.*;
 import game.App;
 import utils.ScreenManager;
 import java.util.Random;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,16 +27,20 @@ public class BattleRoom extends GameScreen {
     private final Background backgroundComponent = new Background(stage);
     private final CaptionBox captionBox = new CaptionBox(stage);
     private final Button buttons = new Button(stage);
-    private final int  numberOfPlayers = 4;
-    private final int health = 4;
-    private final int coolDown = 5;
-    private Timer.Task healthTask;
-    private Timer.Task stageUpdateTask;
+    private int numberOfPlayers;
+    private int health;
+    private int coolDown;
+    private int difficulty;
+    private boolean isRunning = true;
 
     private final List<Player> players = new ArrayList<>();
 
     public BattleRoom(final App app) {
         super(app);
+
+        System.out.println("Number of players: " + numberOfPlayers);
+        System.out.println("Health: " + health);
+        System.out.println("Cool down: " + coolDown);
 
         BitmapFont font = new BitmapFont();
 
@@ -46,22 +49,51 @@ public class BattleRoom extends GameScreen {
         TextButton.TextButtonStyle buttonStyle = new TextButton.TextButtonStyle();
         buttonStyle.font = font;
         buttonStyle.fontColor = Color.WHITE;
-
-        // Add the button style to the skin
         skin.add("default", buttonStyle);
 
     }
 
-    private void initializePlayers() {
-        for (int i = 0; i < numberOfPlayers; i++) {
-            Player player = new Player(health, "Player " + (i + 1), false);
-            players.add(player);
-            stage.addActor(player.getPlayerImage());
-            for (Image heart : player.getHealth()) {
+    public void initializePlayers() {
+        initializePlayer();
+        initializeBots();
+    }
+
+    private void initializePlayer() {
+        Player player = new Player(health, "Player 1", false);
+        players.add(player);
+        stage.addActor(player.getPlayerImage());
+        for (Image heart : player.getHealth()) {
+            stage.addActor(heart);
+        }
+        stage.addActor(player.getNameLabel());
+    }
+
+    private void initializeBots() {
+        for (int i = 0; i < numberOfPlayers - 1; i++) {
+            Bot bot = new Bot(health, "Bot " + (i + 1), false);
+            players.add(bot);
+            stage.addActor(bot.getPlayerImage());
+            for (Image heart : bot.getHealth()) {
                 stage.addActor(heart);
             }
-            stage.addActor(player.getNameLabel());
+            stage.addActor(bot.getNameLabel());
         }
+    }
+
+    public void setDifficulty(int difficulty) {
+        this.difficulty = difficulty;
+    }
+
+    public void setNumberOfPlayers(int numberOfPlayers) {
+        this.numberOfPlayers = numberOfPlayers;
+    }
+
+    public void setHealth(int health) {
+        this.health = health;
+    }
+
+    public void setCoolDown(int coolDown) {
+        this.coolDown = coolDown;
     }
 
     private void placePlayersOnCircle() {
@@ -76,36 +108,49 @@ public class BattleRoom extends GameScreen {
         float angleStep = 360f / numPlayers;
         float currentAngle = 0f;
 
+        // Distribute players and bots evenly on the circle
+        int currentPlayerIndex = 0;
         for (int i = 0; i < numPlayers; i++) {
             float playerX = centerX + radius * MathUtils.cosDeg(currentAngle);
             float playerY = centerY + radius * MathUtils.sinDeg(currentAngle);
 
-            Player player = players.get(i);
-            player.setPosition(playerX, playerY);
-            player.placeHeart();
-            player.placeLabel();
+            // Retrieve player or bot at the current index
+            Player currentPlayer = players.get(currentPlayerIndex);
 
+            // Set position for the current player or bot
+            currentPlayer.setPosition(playerX, playerY);
+            currentPlayer.placeHeart();
+            currentPlayer.placeLabel();
+
+            // Increment current angle for the next player or bot
             currentAngle += angleStep;
+
+            // Increment player index for the next iteration
+            currentPlayerIndex++;
+            // Wrap around the player index if it exceeds the number of players
+            currentPlayerIndex %= numberOfPlayers;
         }
     }
+
 
     private void initializeTasks() {
         Timer.Task healthUpdateTask = new Timer.Task() {
             @Override
             public void run() {
-                simulateHealth();
-                updateStage();
+                if (isRunning) {
+                    simulateHealth();
+                    updateStage();
+                }
             }
         };
 
-        // Schedule the task to run every 500 milliseconds
-        Timer.schedule(healthUpdateTask, 0, 2f);
+        Timer.schedule(healthUpdateTask, 0, 1f);
     }
 
     private void simulateHealth() {
         if (players.size() > 1) {
             try {
-                Thread.sleep(2000);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -119,6 +164,12 @@ public class BattleRoom extends GameScreen {
                 System.out.println(loseLife.getName() + " died!");
                 players.remove(randomIndex);
             }
+        }
+
+        if (players.size() == 1) {
+            System.out.println(players.get(0).getName() + " wins!");
+            app.gsm.setScreen(ScreenManager.STATE.SINGLE);
+            isRunning = false;
         }
     }
 
@@ -199,5 +250,6 @@ public class BattleRoom extends GameScreen {
         stage.dispose();
         skin.dispose();
     }
+
 
 }

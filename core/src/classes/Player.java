@@ -1,9 +1,7 @@
 package classes;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 
@@ -11,8 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Player {
-    private String name;
-    private boolean isDead;
+    protected String name;
+    protected boolean isDead;
     private final Image playerImage;
     private float x;
     private float y;
@@ -48,8 +46,13 @@ public class Player {
         this.playerImage.setPosition(x, y);
     }
 
-    public void playerAnswer(Bomb bomb, String answer) {
-        bomb.setAnsweredWord(answer);
+    public void answer(Bomb bomb, String answer) {
+        System.out.println("Player " + name + " answered + " + answer);
+        if (bomb.checkAnswer(answer)) {
+            System.out.println("Correct answer");
+        } else {
+            reducePlayerHealth();
+        }
     }
 
     public Label getNameLabel() {

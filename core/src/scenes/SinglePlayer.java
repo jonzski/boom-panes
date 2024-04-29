@@ -15,11 +15,16 @@ import components.CaptionBox;
 import game.App;
 import utils.ScreenManager;
 
+import java.util.Scanner;
+
 public class SinglePlayer extends GameScreen {
     private final Skin skin;
     private final Background backgroundComponent = new Background(stage);
     private final CaptionBox captionBox = new CaptionBox(stage);
-
+    private int numberOfPlayers;
+    private int health;
+    private int coolDown;
+    private int difficulty;
 
     public SinglePlayer(final App app) {
         super(app);
@@ -30,6 +35,39 @@ public class SinglePlayer extends GameScreen {
         buttonStyle.fontColor = Color.WHITE;
         skin.add("default", buttonStyle);
     }
+
+    public void setNumberOfPlayers(int numberOfPlayers) {
+        this.numberOfPlayers = numberOfPlayers;
+    }
+
+    public void setHealth(int health) {
+        this.health = health;
+    }
+
+    public void setCoolDown(int coolDown) {
+        this.coolDown = coolDown;
+    }
+
+    public void setDifficulty(int difficulty) {
+        this.difficulty = difficulty;
+    }
+
+    public void inputLobby() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter number of players: ");
+        numberOfPlayers = scanner.nextInt();
+        System.out.println("Enter health: ");
+        health = scanner.nextInt();
+        System.out.println("Enter cool down: ");
+        coolDown = scanner.nextInt();
+        System.out.println("Enter difficulty: ");
+        difficulty = scanner.nextInt();
+
+        setHealth(health);
+        setCoolDown(coolDown);
+        setNumberOfPlayers(numberOfPlayers);
+    }
+
 
     public void addAnActor(String pathname, int width, int height, int x, int y) {
         stage.addActor(new Image(new Texture(pathname)) {{
@@ -80,7 +118,8 @@ public class SinglePlayer extends GameScreen {
         startButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                app.gsm.setScreen(ScreenManager.STATE.BATTLE);
+                inputLobby();
+                app.gsm.setSinglePlayer(ScreenManager.STATE.BATTLE, numberOfPlayers, health, coolDown, difficulty);
             }
         });
 
