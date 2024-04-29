@@ -1,5 +1,6 @@
 package scenes;
 
+import classes.Bomb;
 import classes.Health;
 import classes.Player;
 import com.badlogic.gdx.Gdx;
@@ -8,9 +9,11 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Timer;
 import components.*;
 import game.App;
 import utils.ScreenManager;
@@ -28,6 +31,8 @@ public class BattleRoom extends GameScreen {
     private final int  numberOfPlayers = 4;
     private final int health = 4;
     private final int coolDown = 5;
+    private Timer.Task healthTask;
+    private Timer.Task stageUpdateTask;
 
     private final List<Player> players = new ArrayList<>();
 
@@ -52,53 +57,23 @@ public class BattleRoom extends GameScreen {
             Player player = new Player(health, "Player " + (i + 1), false);
             players.add(player);
             stage.addActor(player.getPlayerImage());
-            for (Health health : player.getHearts()) {
-                stage.addActor(health);
+            for (Image heart : player.getHealth()) {
+                stage.addActor(heart);
             }
             stage.addActor(player.getNameLabel());
         }
     }
 
-    @Override
-    public void show() {
-        // Clear existing players and stage
-        players.clear();
-        stage.clear();
-
-        // Background
-        backgroundComponent.addBackgroundImage("battleroom-bg.png", Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        captionBox.insertCaptionBox("Main Menu", 0,0);
-        captionBox.addCaptionBox("caption-box.png", Gdx.graphics.getWidth(), 64, 0, 0);
-
-        ClickListener quitListener = new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                app.gsm.setScreen(ScreenManager.STATE.SINGLE);
-            }
-        };
-
-        buttons.placeButton("QUIT", 50, 25, quitListener);
-        initializePlayers();
-        placePlayersOnCircle();
-
-        // Set input processor
-        Gdx.input.setInputProcessor(stage);
-    }
-
     private void placePlayersOnCircle() {
         float centerX = (float) Gdx.graphics.getWidth() / 3;
         float centerY = (float) Gdx.graphics.getHeight() / 2;
-
         float maxRadius = Math.min(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()) * 0.4f;
 
         int maxPlayers = (int) (2 * Math.PI * maxRadius / 48);
-
         int numPlayers = Math.min(numberOfPlayers, maxPlayers);
 
         float radius = maxRadius / 2 * (1 / MathUtils.cosDeg((float) 180 / numPlayers));
-
         float angleStep = 360f / numPlayers;
-
         float currentAngle = 0f;
 
         for (int i = 0; i < numPlayers; i++) {
@@ -114,6 +89,54 @@ public class BattleRoom extends GameScreen {
         }
     }
 
+    private void initializeTasks() {
+        Timer.Task healthUpdateTask = new Timer.Task() {
+            @Override
+            public void run() {
+                simulateHealth();
+                updateStage();
+            }
+        };
+
+        // Schedule the task to run every 500 milliseconds
+        Timer.schedule(healthUpdateTask, 0, 2f);
+    }
+
+    private void simulateHealth() {
+        if (players.size() > 1) {
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            Random rand = new Random();
+            int randomIndex = rand.nextInt(players.size());
+            Player loseLife = players.get(randomIndex);
+            System.out.println(loseLife.getName() + " lost a life...");
+            loseLife.reducePlayerHealth();
+
+            if (loseLife.isDead()) {
+                System.out.println(loseLife.getName() + " died!");
+                players.remove(randomIndex);
+            }
+        }
+    }
+
+    public void updateStage() {
+        System.out.println("Updating stage...");
+        stage.act(Gdx.graphics.getDeltaTime());
+        stage.draw();
+    }
+    private void placeBomb() {
+        Bomb bomb = new Bomb(false, coolDown);
+        bomb.setBomb(400, 288);
+        stage.addActor(bomb.getBombImage());
+    }
+
+
+    private void rotatePlayer(){
+
+    }
 
     @Override
     public void update(float delta) {
@@ -127,37 +150,31 @@ public class BattleRoom extends GameScreen {
 
         stage.act(delta);
         stage.draw();
+    }
+    
 
-//         simulate random players not answering
-        while(players.size() > 1) {
-            try {
-                // Sleep for 2 seconds
-                Thread.sleep(2000); // Sleep for 5000 milliseconds (5 seconds)
-            } catch (InterruptedException e) {
-                // Handle the InterruptedException, if needed
-                e.printStackTrace();
+    @Override
+    public void show() {
+        backgroundComponent.addBackgroundImage("battleroom-bg.png", Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        captionBox.insertCaptionBox("Main Menu", 0,0);
+        captionBox.addCaptionBox("caption-box.png", Gdx.graphics.getWidth(), 64, 0, 0);
+
+        ClickListener quitListener = new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                app.gsm.setScreen(ScreenManager.STATE.SINGLE);
             }
-            Random rand = new Random();
-            int randomIndex = rand.nextInt(players.size());
-            Player loseLife = players.get(randomIndex);
-            System.out.println(loseLife.getName() + " lost a life...");
-            loseLife.reducePlayerHealth();
-            if (loseLife.getStatus()){
-                System.out.println(loseLife.getName() + " died!");
-                players.remove(randomIndex);
-            }
-        }
+        };
 
-        if(players.size() == 1) {
-            System.out.println(players.get(0).getName() + " won!");
-            app.gsm.setScreen(ScreenManager.STATE.SINGLE);
-
-        }
+        buttons.placeButton("QUIT", 50, 25, quitListener);
+        initializePlayers();
+        placePlayersOnCircle();
+        placeBomb();
+        initializeTasks();
+        
+        Gdx.input.setInputProcessor(stage);
     }
 
-    public void rotatePlayer(){
-
-    }
 
     @Override
     public void pause() {
@@ -179,7 +196,6 @@ public class BattleRoom extends GameScreen {
 
     @Override
     public void dispose() {
-        // Dispose existing stage and skin
         stage.dispose();
         skin.dispose();
     }

@@ -36,8 +36,4 @@ public abstract class GameScreen implements Screen {
         stage.dispose();
     }
 
-    // Method to handle back navigation events
-    public boolean allowsBackNavigation() {
-        return true; // Override in subclasses as needed
-    }
 }

@@ -1,7 +1,9 @@
 package classes;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 
@@ -10,26 +12,26 @@ import java.util.List;
 
 public class Player {
     private String name;
-    private boolean status;
+    private boolean isDead;
     private final Image playerImage;
     private float x;
     private float y;
     private BitmapFont font;
     private int healthValue;
-    private final List<Health> health = new ArrayList<>();
+    private final List<Image> health = new ArrayList<>();
     private Label nameLabel;
 
-    public Player(int healthValue, String name, boolean status) {
+    public Player(int healthValue, String name, boolean isDead) {
         this.name = name;
-        this.status = status;
+        this.isDead = isDead;
         this.playerImage = new Image(new Texture("player-head.png"));
-        this.playerImage.setPosition(x, y); // Set initial position
         this.font = new BitmapFont();
         this.healthValue = healthValue;
 
-        this.playerImage.setPosition(x, y);
         for (int i = 0; i < healthValue; i++) {
-            Health heart = new Health(x, y);
+            Image heart = new Image(new Texture("health.png"));
+            heart.setPosition(x, y);
+            heart.setScale(0.8f);
             health.add(heart);
         }
 
@@ -54,17 +56,16 @@ public class Player {
         return nameLabel;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public void reducePlayerHealth() {
         this.healthValue -= 1;
+        Image lastHealth = health.remove(health.size() - 1);
+        lastHealth.remove();
+
         if (this.healthValue < 0) {
-            this.healthValue = 0; // Ensure health doesn't go below zero
+            this.healthValue = 0;
         }
         if (this.healthValue == 0) {
-            this.status = true;
+            setDead();
         }
     }
 
@@ -72,23 +73,22 @@ public class Player {
         return name;
     }
 
-    public void setDead() {
-        this.status = true;
+    private void setDead() {
+        this.isDead = true;
     }
 
-    public boolean getStatus() {
-        return status;
+    public boolean isDead() {
+        return isDead;
     }
 
     public Image getPlayerImage() {
         return playerImage;
     }
 
-    public List<Health> getHearts() {
+    public List<Image> getHearts() {
         placeHeart();
         return health;
     }
-
 
     public void placeHeart() {
         float totalWidthOfHearts = health.size() * (health.get(0).getWidth());
@@ -96,7 +96,7 @@ public class Player {
         float heartY = playerImage.getY() - playerImage.getHeight();
 
         for (int i = 0; i < health.size(); i++) {
-            Health currentHealth = health.get(i);
+            Image currentHealth = health.get(i);
             float heartX = startX + i * (currentHealth.getWidth() + 10);
             currentHealth.setPosition(heartX, heartY);
         }
@@ -107,4 +107,7 @@ public class Player {
                 playerImage.getY() - (playerImage.getHeight() / 2) );
     }
 
+    public Image[] getHealth() {
+        return health.toArray(new Image[0]);
+    }
 }

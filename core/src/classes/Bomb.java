@@ -1,16 +1,35 @@
 package classes;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Scanner;
+
 public class Bomb {
-    private final String hintLetter;
     private String answeredWord;
     private boolean isExploded;
     private int explosionCooldown;
-    private int finalImage;
+    private Image bombImage = new Image(new Texture("bomb.png"));
+    private ArrayList<String> dictionary = new ArrayList<>();
 
-    public Bomb(String hintLetter, boolean isExploded, int explosionCooldown){
-        this.hintLetter = hintLetter;
+    public Bomb(boolean isExploded, int explosionCooldown){
         this.isExploded = false;
         this.explosionCooldown = explosionCooldown;
+        initializeDictionary();
+    }
+
+    public void initializeDictionary() {
+        try {
+            InputStream dictionary = getClass().getResourceAsStream("Test.txt");
+            Scanner scanner = new Scanner(dictionary);
+            while (scanner.hasNextLine()) {
+                this.dictionary.add(scanner.nextLine());
+                System.out.println(this.dictionary);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void checkAnswer(String answeredWord){
@@ -21,24 +40,18 @@ public class Bomb {
         this.answeredWord = answeredWord;
     }
 
-    public String getHintLetter() {
-        return hintLetter;
-    }
-
-    public int getExplosionCooldown() {
-        return explosionCooldown;
-    }
 
     public void explode(){
         isExploded = true;
     }
 
-    public void setExplosionCooldown(int explosionCooldown) {
-        this.explosionCooldown = explosionCooldown;
+    public Image getBombImage() {
+        return bombImage;
     }
 
-    public String getAnsweredWord() {
-        return answeredWord;
+    public void setBomb(float x, float y) {
+        bombImage.setPosition(x, y);
+        bombImage.setSize(150, 150);
     }
 
     public void updateCooldownAndExplode() {

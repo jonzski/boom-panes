@@ -6,8 +6,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 public class Health extends Image {
 
     public Health(float x, float y) {
-        super(new Texture("health.png")); // Assuming you have a heart image file
+        super(new Texture("health.png"));
         setPosition(x, y);
+        setScale(0.8f);
     }
+
 
 }
