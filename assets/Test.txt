@@ -2,7 +2,7 @@ mono
 chrome
 butterfly
 yes
-indeeed
+indeed
 from
 the
 eyy

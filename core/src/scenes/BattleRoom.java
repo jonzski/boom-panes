@@ -31,7 +31,7 @@ public class BattleRoom extends GameScreen {
     private final Skin skin;
     private final Background backgroundComponent = new Background(stage);
     private final CaptionBox captionBox = new CaptionBox(stage);
-    private TextField textField;
+    private TextField wordTextField;
     private final Button buttons = new Button(stage);
     private int numberOfPlayers;
     private int health;
@@ -45,9 +45,11 @@ public class BattleRoom extends GameScreen {
     public BattleRoom(final App app) {
         super(app);
 
+
         System.out.println("Number of players: " + numberOfPlayers);
         System.out.println("Health: " + health);
         System.out.println("Cool down: " + coolDown);
+        System.out.println("Difficulty: " + difficulty);
 
         BitmapFont font = new BitmapFont();
 
@@ -127,14 +129,20 @@ public class BattleRoom extends GameScreen {
             float playerX = centerX + radius * MathUtils.cosDeg(currentAngle);
             float playerY = centerY + radius * MathUtils.sinDeg(currentAngle);
 
+            // Retrieve player or bot at the current index
             Player currentPlayer = players.get(currentPlayerIndex);
 
+            // Set position for the current player or bot
             currentPlayer.setPosition(playerX, playerY);
             currentPlayer.placeHeart();
             currentPlayer.placeLabel();
+
+            // Increment current angle for the next player or bot
             currentAngle += angleStep;
 
+            // Increment player index for the next iteration
             currentPlayerIndex++;
+            // Wrap around the player index if it exceeds the number of players
             currentPlayerIndex %= numberOfPlayers;
         }
     }
@@ -161,6 +169,53 @@ public class BattleRoom extends GameScreen {
         simulateBattle();
         updateBombCooldown();
         updateStage();
+                    simulateHealth();
+                    updateStage();
+                }
+            }
+        };
+
+        Timer.schedule(healthUpdateTask, 0, 1f);
+    }
+
+    // sample check word availability
+    private Boolean isValidWord(String word) {
+        return word.equals("Correct");
+    }
+
+    private void simulateHealth() {
+        int currentPlayerIndex = 0;     // current index of player answering
+
+        if (players.size() > 1) {
+
+//            Random rand = new Random();
+//            int randomIndex = rand.nextInt(players.size());
+
+            // Handle player input
+            if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
+                String word = wordTextField.getText();
+
+                // check if word is valid
+                if (!isValidWord(word)) {
+                    // Update game state based on invalid word
+                    Player loseLife = players.get(currentPlayerIndex);
+                    System.out.println(loseLife.getName() + " lost a life...");
+                    loseLife.reducePlayerHealth();
+
+                    if (loseLife.isDead()) {
+                        System.out.println(loseLife.getName() + " died!");
+                        players.remove(currentPlayerIndex);
+                    }
+
+                } else {
+                    // Show error message or handle valid word
+                    System.out.print("word exists!");
+                }
+            }
+
+            currentPlayerIndex = (currentPlayerIndex + 1) % numberOfPlayers;
+            // Clear input field
+            wordTextField.setText("");
 
         if (players.size() == 1) {
             System.out.println(players.get(0).getName() + " wins!");
@@ -200,13 +255,21 @@ public class BattleRoom extends GameScreen {
             bomb.updateCooldownAndExplode();
         }
     }
+            if (players.size() == 1) {
+                System.out.println(players.get(0).getName() + " wins!");
+                app.gsm.setScreen(ScreenManager.STATE.SINGLE);
+                isRunning = false;
+            }
+        }
+
+    }
 
     public void updateStage() {
         System.out.println("Updating stage...");
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
     }
-    
+
     @Override
     public void update(float delta) {
 
@@ -227,6 +290,11 @@ public class BattleRoom extends GameScreen {
         backgroundComponent.addBackgroundImage("battleroom-bg.png", Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         captionBox.insertCaptionBox("Main Menu", 0,0);
         captionBox.addCaptionBox("caption-box.png", Gdx.graphics.getWidth(), 64, 0, 0);
+
+        // make a text field for answers
+        wordTextField = new TextField("", skin);
+        wordTextField.setPosition(Gdx.graphics.getWidth()/2 - 50, 100);
+        stage.addActor(wordTextField);
 
         ClickListener quitListener = new ClickListener() {
             @Override
