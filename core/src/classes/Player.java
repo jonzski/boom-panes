@@ -18,6 +18,7 @@ public class Player {
     private int healthValue;
     private final List<Image> health = new ArrayList<>();
     private Label nameLabel;
+    protected boolean setTurn = false;
 
     public Player(int healthValue, String name, boolean isDead) {
         this.name = name;
@@ -46,12 +47,17 @@ public class Player {
         this.playerImage.setPosition(x, y);
     }
 
+    public void setTurn(boolean setTurn) {
+        this.setTurn = setTurn;
+    }
+
     public void answer(Bomb bomb, String answer) {
         System.out.println("Player " + name + " answered + " + answer);
         if (bomb.checkAnswer(answer)) {
             System.out.println("Correct answer");
+            setTurn(false);
         } else {
-            reducePlayerHealth();
+            System.out.println("Incorrect answer, try again");
         }
     }
 

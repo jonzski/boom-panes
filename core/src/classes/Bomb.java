@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Bomb {
-    private String answeredWord;
     private boolean isExploded;
     private int explosionCooldown;
     private Image bombImage = new Image(new Texture("bomb.png"));
@@ -42,33 +41,22 @@ public class Bomb {
         int randomIndex = (int) (Math.random() * dictionary.size());
         String word = dictionary.get(randomIndex);
 
-        int randomChoice = (int) (Math.random() * 2);
-        if (randomChoice == 0) {
-            return word.substring(0, 2);
-        } else {
-            return word.substring(word.length() - 2);
-        }
+        int randomChoice = (int) (Math.random() * (word.length() - 2)); // Random position within the word
+        int randomLength = (int) (Math.random() * 2) + 2; // Random length between 2 and 3
+
+        System.out.println("Hint: " + word.substring(randomChoice, randomChoice + randomLength));
+        return word.substring(randomChoice, randomChoice + randomLength);
     }
 
     public boolean checkAnswer(String answer){
         if (dictionary.contains(answer)){
             if(answer.contains(hint)){
+                this.hint = randomizeHint();
                 return true;
             }
         }
         return false;
     }
-
-    public String getAnsweredWord(){
-        return answeredWord;
-    }
-
-
-
-    public void setAnsweredWord(String answeredWord){
-        this.answeredWord = answeredWord;
-    }
-
 
     public void explode(){
         isExploded = true;
@@ -92,7 +80,15 @@ public class Bomb {
         }
     }
 
+    public boolean isExploded() {
+        return isExploded;
+    }
+
     public ArrayList<String> getDictionary() {
         return dictionary;
+    }
+
+    public String getHint() {
+        return hint;
     }
 }

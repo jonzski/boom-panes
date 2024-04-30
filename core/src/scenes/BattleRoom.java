@@ -4,14 +4,17 @@ import classes.Bomb;
 import classes.Player;
 import classes.Bot;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Timer;
 import components.*;
@@ -20,12 +23,15 @@ import utils.ScreenManager;
 import java.util.Random;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class BattleRoom extends GameScreen {
 
     private final Skin skin;
     private final Background backgroundComponent = new Background(stage);
     private final CaptionBox captionBox = new CaptionBox(stage);
+    private TextField textField;
     private final Button buttons = new Button(stage);
     private int numberOfPlayers;
     private int health;
@@ -34,6 +40,7 @@ public class BattleRoom extends GameScreen {
     private boolean isRunning = true;
 
     private final List<Player> players = new ArrayList<>();
+    private Bomb bomb;
 
     public BattleRoom(final App app) {
         super(app);
@@ -54,7 +61,7 @@ public class BattleRoom extends GameScreen {
     }
 
     public void initializePlayers() {
-        initializePlayer();
+//        initializePlayer();
         initializeBots();
     }
 
@@ -69,8 +76,8 @@ public class BattleRoom extends GameScreen {
     }
 
     private void initializeBots() {
-        for (int i = 0; i < numberOfPlayers - 1; i++) {
-            Bot bot = new Bot(health, "Bot " + (i + 1), false);
+        for (int i = 0; i < numberOfPlayers; i++) {
+            Bot bot = new Bot(health, "Bot " + (i + 1), false, difficulty);
             players.add(bot);
             stage.addActor(bot.getPlayerImage());
             for (Image heart : bot.getHealth()) {
@@ -78,6 +85,12 @@ public class BattleRoom extends GameScreen {
             }
             stage.addActor(bot.getNameLabel());
         }
+    }
+
+    private void initializeBomb() {
+        this.bomb = new Bomb(false, coolDown);
+        bomb.setBomb(400, 288);
+        stage.addActor(bomb.getBombImage());
     }
 
     public void setDifficulty(int difficulty) {
@@ -114,62 +127,77 @@ public class BattleRoom extends GameScreen {
             float playerX = centerX + radius * MathUtils.cosDeg(currentAngle);
             float playerY = centerY + radius * MathUtils.sinDeg(currentAngle);
 
-            // Retrieve player or bot at the current index
             Player currentPlayer = players.get(currentPlayerIndex);
 
-            // Set position for the current player or bot
             currentPlayer.setPosition(playerX, playerY);
             currentPlayer.placeHeart();
             currentPlayer.placeLabel();
-
-            // Increment current angle for the next player or bot
             currentAngle += angleStep;
 
-            // Increment player index for the next iteration
             currentPlayerIndex++;
-            // Wrap around the player index if it exceeds the number of players
             currentPlayerIndex %= numberOfPlayers;
         }
     }
 
 
-    private void initializeTasks() {
-        Timer.Task healthUpdateTask = new Timer.Task() {
+    private void startGame() {
+        Timer.Task task = new Timer.Task() {
             @Override
             public void run() {
                 if (isRunning) {
-                    simulateHealth();
-                    updateStage();
+                    simulateGame();
                 }
             }
         };
 
-        Timer.schedule(healthUpdateTask, 0, 1f);
+        Timer.schedule(task, 0, coolDown * 1000f);
     }
 
-    private void simulateHealth() {
-        if (players.size() > 1) {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            Random rand = new Random();
-            int randomIndex = rand.nextInt(players.size());
-            Player loseLife = players.get(randomIndex);
-            System.out.println(loseLife.getName() + " lost a life...");
-            loseLife.reducePlayerHealth();
+    private void endGame() {
+        isRunning = false;
+    }
 
-            if (loseLife.isDead()) {
-                System.out.println(loseLife.getName() + " died!");
-                players.remove(randomIndex);
-            }
-        }
+    private void simulateGame() {
+        simulateBattle();
+        updateBombCooldown();
+        updateStage();
 
         if (players.size() == 1) {
             System.out.println(players.get(0).getName() + " wins!");
             app.gsm.setScreen(ScreenManager.STATE.SINGLE);
-            isRunning = false;
+            endGame();
+        }
+    }
+
+    private void simulateBattle() {
+        if (players.size() > 1) {
+            for (Player player : players) {
+                if (player.isDead()) {
+                    continue;
+                }
+
+                if (player instanceof Bot) {
+                    Bot bot = (Bot) player;
+                    String answer = bot.simulateAnswer(bomb);
+                    bot.answer(bomb, answer);
+                }
+
+                if (bomb.isExploded()) {
+                    player.reducePlayerHealth();
+                }
+
+                if (player.isDead()) {
+                    System.out.println(player.getName() + " is dead!");
+                }
+            }
+
+            players.removeIf(Player::isDead);
+        }
+    }
+
+    private void updateBombCooldown() {
+        if (bomb != null && !bomb.isExploded()) {
+            bomb.updateCooldownAndExplode();
         }
     }
 
@@ -178,17 +206,7 @@ public class BattleRoom extends GameScreen {
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
     }
-    private void placeBomb() {
-        Bomb bomb = new Bomb(false, coolDown);
-        bomb.setBomb(400, 288);
-        stage.addActor(bomb.getBombImage());
-    }
-
-
-    private void rotatePlayer(){
-
-    }
-
+    
     @Override
     public void update(float delta) {
 
@@ -220,8 +238,9 @@ public class BattleRoom extends GameScreen {
         buttons.placeButton("QUIT", 50, 25, quitListener);
         initializePlayers();
         placePlayersOnCircle();
-        placeBomb();
-        initializeTasks();
+        initializeBomb();
+//        initializeInputField();
+        startGame();
         
         Gdx.input.setInputProcessor(stage);
     }
