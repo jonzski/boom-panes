@@ -4,6 +4,7 @@ import classes.Bomb;
 import classes.Player;
 import classes.Bot;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.*;
@@ -12,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Timer;
 import components.*;
@@ -26,6 +28,7 @@ public class BattleRoom extends GameScreen {
     private final Skin skin;
     private final Background backgroundComponent = new Background(stage);
     private final CaptionBox captionBox = new CaptionBox(stage);
+    private TextField wordTextField;
     private final Button buttons = new Button(stage);
     private int numberOfPlayers;
     private int health;
@@ -38,9 +41,11 @@ public class BattleRoom extends GameScreen {
     public BattleRoom(final App app) {
         super(app);
 
+
         System.out.println("Number of players: " + numberOfPlayers);
         System.out.println("Health: " + health);
         System.out.println("Cool down: " + coolDown);
+        System.out.println("Difficulty: " + difficulty);
 
         BitmapFont font = new BitmapFont();
 
@@ -147,30 +152,52 @@ public class BattleRoom extends GameScreen {
         Timer.schedule(healthUpdateTask, 0, 1f);
     }
 
+    // sample check word availability
+    private Boolean isValidWord(String word) {
+        return word.equals("Correct");
+    }
+
     private void simulateHealth() {
+        int currentPlayerIndex = 0;     // current index of player answering
+
         if (players.size() > 1) {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            Random rand = new Random();
-            int randomIndex = rand.nextInt(players.size());
-            Player loseLife = players.get(randomIndex);
-            System.out.println(loseLife.getName() + " lost a life...");
-            loseLife.reducePlayerHealth();
 
-            if (loseLife.isDead()) {
-                System.out.println(loseLife.getName() + " died!");
-                players.remove(randomIndex);
+//            Random rand = new Random();
+//            int randomIndex = rand.nextInt(players.size());
+
+            // Handle player input
+            if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
+                String word = wordTextField.getText();
+
+                // check if word is valid
+                if (!isValidWord(word)) {
+                    // Update game state based on invalid word
+                    Player loseLife = players.get(currentPlayerIndex);
+                    System.out.println(loseLife.getName() + " lost a life...");
+                    loseLife.reducePlayerHealth();
+
+                    if (loseLife.isDead()) {
+                        System.out.println(loseLife.getName() + " died!");
+                        players.remove(currentPlayerIndex);
+                    }
+
+                } else {
+                    // Show error message or handle valid word
+                    System.out.print("word exists!");
+                }
+            }
+
+            currentPlayerIndex = (currentPlayerIndex + 1) % numberOfPlayers;
+            // Clear input field
+            wordTextField.setText("");
+
+            if (players.size() == 1) {
+                System.out.println(players.get(0).getName() + " wins!");
+                app.gsm.setScreen(ScreenManager.STATE.SINGLE);
+                isRunning = false;
             }
         }
 
-        if (players.size() == 1) {
-            System.out.println(players.get(0).getName() + " wins!");
-            app.gsm.setScreen(ScreenManager.STATE.SINGLE);
-            isRunning = false;
-        }
     }
 
     public void updateStage() {
@@ -209,6 +236,11 @@ public class BattleRoom extends GameScreen {
         backgroundComponent.addBackgroundImage("battleroom-bg.png", Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         captionBox.insertCaptionBox("Main Menu", 0,0);
         captionBox.addCaptionBox("caption-box.png", Gdx.graphics.getWidth(), 64, 0, 0);
+
+        // make a text field for answers
+        wordTextField = new TextField("", skin);
+        wordTextField.setPosition(Gdx.graphics.getWidth()/2 - 50, 100);
+        stage.addActor(wordTextField);
 
         ClickListener quitListener = new ClickListener() {
             @Override
