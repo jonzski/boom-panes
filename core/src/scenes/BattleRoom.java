@@ -33,6 +33,7 @@ public class BattleRoom extends GameScreen {
     private final Background backgroundComponent = new Background(stage);
     private final CaptionBox captionBox = new CaptionBox(stage);
     private TextField textField;
+    private TextField wordTextField;
     private final Button buttons = new Button(stage);
     private int numberOfPlayers;
     private int health;
@@ -47,9 +48,11 @@ public class BattleRoom extends GameScreen {
     public BattleRoom(final App app) {
         super(app);
 
+
         System.out.println("Number of players: " + numberOfPlayers);
         System.out.println("Health: " + health);
         System.out.println("Cool down: " + coolDown);
+        System.out.println("Difficulty: " + difficulty);
 
         timer = new GameTimer();
 
@@ -131,14 +134,20 @@ public class BattleRoom extends GameScreen {
             float playerX = centerX + radius * MathUtils.cosDeg(currentAngle);
             float playerY = centerY + radius * MathUtils.sinDeg(currentAngle);
 
+            // Retrieve player or bot at the current index
             Player currentPlayer = players.get(currentPlayerIndex);
 
+            // Set position for the current player or bot
             currentPlayer.setPosition(playerX, playerY);
             currentPlayer.placeHeart();
             currentPlayer.placeLabel();
+
+            // Increment current angle for the next player or bot
             currentAngle += angleStep;
 
+            // Increment player index for the next iteration
             currentPlayerIndex++;
+            // Wrap around the player index if it exceeds the number of players
             currentPlayerIndex %= numberOfPlayers;
         }
     }
@@ -168,59 +177,65 @@ public class BattleRoom extends GameScreen {
         // initialize
         Player lastDead = new Player(5, "lastdead", true);
 
-        try {
-            // Sleep for 1 second (1000 milliseconds)
-            Thread.sleep(1000);
-            if (players.size() > 1) {
-                for (Player player : players) {
-                    // time the player
-                    timer.start();
-                    // for every player, print lives
-                    System.out.println(player.getName() + "has lives: " + player.getHealthValue());
+        // player is not alone
+        if (players.size() > 1) {
+            // for every player
+            for (Player player : players) {
+                // initialize wrong result
+                boolean result = false;
+                // skip if dead
+                if (player.isDead()) {
+                    continue;
+                }
+                // time the player
+                timer.start();
+                // for every player, print lives
+                System.out.println(player.getName() + "has lives: " + player.getHealthValue());
 
-                    // if dead, the skip turn
-                    if (player.isDead()) {
-                        continue;
-                    }
+                // while not cooldowned or havent answered correctly
+                while (timer.getElapsedTimeSeconds() < 5 && !result) {
 
-                    // answer
-                    if (player instanceof Bot) {
-                        Bot bot = (Bot) player;
-                        String answer = bot.simulateAnswer(bomb);
-                        bot.answer(bomb, answer);
+                    // try to answer
+                    try {
+                        // wait 1 second before answering
+                        Thread.sleep(1000);
+                        if (player instanceof Bot) {
+                            Bot bot = (Bot) player;
+                            String answer = bot.simulateAnswer(bomb);
+                            result = bot.answer(bomb, answer);
+                        }
+                    } catch (InterruptedException e) {
+                        // Handle interruption exception
+                        e.printStackTrace();
                     }
+                }
 
 //                    if (bomb.isExploded()) {
 //                        player.reducePlayerHealth();
 //                    }
 
-                    if (timer.getElapsedTimeSeconds() >= 5) {
-                        // minus health
-                        System.out.println("time: " + timer.getElapsedTimeSeconds());
-                        player.reducePlayerHealth();
-
-                        // reset to 0
-                        timer.stop();
-                        timer.reset();
-                    }
-
-                    if (player.isDead()) {
-                        System.out.println(player.getName() + " is dead!");
-                        lastDead = player;
-                    }
+                // if result incorrect (meaning the cooldown passed without giving a correct answer
+                if (!result) {
+                    player.reducePlayerHealth();
                 }
 
-                // for instances that both players die
-                players.removeIf(Player::isDead);
-                if (players.isEmpty()) {
-                    players.add(lastDead);
+                // reset the timer to 0
+                timer.stop();
+                timer.reset();
+
+                // remember latest dead player
+                if (player.isDead()) {
+                    System.out.println(player.getName() + " is dead!");
+                    lastDead = player;
                 }
             }
-        } catch (InterruptedException e) {
-            // Handle interruption exception
-            e.printStackTrace();
-        }
 
+            players.removeIf(Player::isDead);
+            // for instances that both players die
+            if (players.isEmpty()) {
+                players.add(lastDead);
+            }
+        }
     }
 
     private void updateBombCooldown() {
