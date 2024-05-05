@@ -11,12 +11,15 @@ public class Bot extends Player{
         this.difficulty = difficulty;
     }
 
-    public void answer(Bomb bomb, String answer) {
+    public Boolean answer(Bomb bomb, String answer) {
         System.out.println("Bot " + name + " answered: " + answer);
         if (bomb.checkAnswer(answer)) {
             System.out.println("Correct answer");
+            return true;
         } else {
             System.out.println("Incorrect answer, try again");
+            return false;
+//            this.reducePlayerHealth();
         }
     }
 
@@ -59,7 +62,7 @@ public class Bot extends Player{
                 return randomAnswer;
             }
         }
-        return "Incorrect answer";
+        return "x";
     }
 
 }
