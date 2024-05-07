@@ -17,6 +17,7 @@ public class Bomb {
     private String hint;
     private Input.TextInputListener textInput;
 
+
     public Bomb(boolean isExploded, int explosionCooldown){
         this.isExploded = false;
         this.explosionCooldown = explosionCooldown;

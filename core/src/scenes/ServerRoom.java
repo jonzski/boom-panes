@@ -107,6 +107,7 @@ public class ServerRoom extends GameScreen {
 
     @Override
     public void render(float delta) {
+        System.out.println("" + Gdx.graphics.getDeltaTime());
         Gdx.gl.glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 

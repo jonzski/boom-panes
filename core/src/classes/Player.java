@@ -51,13 +51,15 @@ public class Player {
         this.setTurn = setTurn;
     }
 
-    public void answer(Bomb bomb, String answer) {
+    public Boolean answer(Bomb bomb, String answer) {
         System.out.println("Player " + name + " answered + " + answer);
         if (bomb.checkAnswer(answer)) {
             System.out.println("Correct answer");
             setTurn(false);
+            return true;
         } else {
             System.out.println("Incorrect answer, try again");
+            return false;
         }
     }
 
@@ -118,5 +120,9 @@ public class Player {
 
     public Image[] getHealth() {
         return health.toArray(new Image[0]);
+    }
+
+    public int getHealthValue() {
+        return healthValue;
     }
 }

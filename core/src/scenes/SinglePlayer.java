@@ -25,6 +25,7 @@ public class SinglePlayer extends GameScreen {
     private int health;
     private int coolDown;
     private int difficulty;
+    private float gameTimer = 0;
 
     public SinglePlayer(final App app) {
         super(app);
