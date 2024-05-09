@@ -76,14 +76,14 @@ public class Player extends Sprite {
         return this.isDead;
     }
 
-    public boolean answer(Bomb bomb, String answer) {
+    public int answer(Bomb bomb, String answer) {
         System.out.println("Player " + name + " answered: " + answer);
         if (bomb.checkAnswer(answer)) {
             System.out.println("Correct answer");
-            return true;
+            return 1;
         } else {
             System.out.println("Incorrect answer, try again");
-            return false;
+            return -1;
         }
     }
 }

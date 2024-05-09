@@ -32,7 +32,7 @@
             <Image url="@../assets/Buttons/arrow.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="48.0" fitWidth="48.0" layoutX="1205.0" layoutY="662.0" nodeOrientation="RIGHT_TO_LEFT" onMouseClicked="#switchToBattleSingle" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="48.0" fitWidth="48.0" layoutX="1205.0" layoutY="662.0" nodeOrientation="RIGHT_TO_LEFT" onMouseClicked="#switchToSingleGame" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../assets/Buttons/arrow.png" />
          </image>

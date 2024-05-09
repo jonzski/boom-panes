@@ -22,12 +22,12 @@
                   <Image url="@../assets/bomb.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="80.0" fitWidth="760.0" layoutX="580.0" layoutY="198.0" onMouseClicked="#switchToSinglePlayer" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="80.0" fitWidth="760.0" layoutX="580.0" layoutY="198.0" onMouseClicked="#switchToLobbySingle" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../assets/Buttons/single.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="80.0" fitWidth="760.0" layoutX="580.0" layoutY="301.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="80.0" fitWidth="760.0" layoutX="580.0" layoutY="301.0" onMouseClicked="#switchToLobby" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../assets/Buttons/muti.png" />
                </image>
@@ -42,7 +42,7 @@
                   <Image url="@../assets/Buttons/exit.png" />
                </image>
             </ImageView>
-            <Label layoutX="696.0" layoutY="210.0" onMouseClicked="#switchToSinglePlayer" text="Single Player" textFill="WHITE">
+            <Label layoutX="696.0" layoutY="210.0" onMouseClicked="#switchToLobbySingle" text="Single Player" textFill="WHITE">
                <font>
                   <Font name="Poppins Regular" size="40.0" />
                </font>

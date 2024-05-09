@@ -12,7 +12,6 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.control.TextField;
 
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
@@ -26,8 +25,10 @@ public class SingleRoom extends AnimationTimer {
 
     private int difficulty = 1;
     private int health = 3;
-    private int duration = 3;
+    private int duration = 6;
     private int numBots = 3;
+
+    private int currentPlayerIndex = 0;
 
     private Player player;
     private Bomb bomb;
@@ -36,7 +37,7 @@ public class SingleRoom extends AnimationTimer {
     private final static int WINDOW_HEIGHT = 720;
     private boolean isRunning = true;
 
-    private TextField answerField = new TextField();
+    private TextField answerField;
 
     private GameTimer timer;
     private GameTimer waitTimer;
@@ -50,7 +51,6 @@ public class SingleRoom extends AnimationTimer {
         this.root = new Group();
         this.scene = new Scene(root, SingleRoom.WINDOW_WIDTH, SingleRoom.WINDOW_HEIGHT);
         this.root.getChildren().add(this.canvas);
-        this.root.getChildren().add(answerField);
         this.timer = new GameTimer();
         this.waitTimer = new GameTimer();
         this.initializeBots();
@@ -103,6 +103,14 @@ public class SingleRoom extends AnimationTimer {
     public void handle(long now) {
         initBackground();
         renderSprite();
+
+        // initialize timers
+        timer.start();
+        waitTimer.start();
+//        System.out.println(currentPlayerIndex);
+        // let current player answer his turn
+        System.out.println(currentPlayerIndex + "\t" + timer.getElapsedTimeSeconds() + "\t" + waitTimer.getElapsedTimeSeconds());
+        if(isRunning) simulateAnswer();
     }
 
     private void renderBots() {
@@ -145,35 +153,77 @@ public class SingleRoom extends AnimationTimer {
         isRunning = false;
     }
 
+    private void simulateAnswer() {
+        // initialize result
+        int result = 0;
 
-    private void playerTurn() {
-        String answer = answerField.getText();
-        boolean result = player.answer(bomb, answer);
-    }
+        // adjust player index
+        currentPlayerIndex = currentPlayerIndex % bots.size();
 
-    private void botsTurn() {
-        for (Bot bot : bots) {
-            boolean result = false;
-            timer.reset();
-            waitTimer.reset();
-            timer.start();
-            waitTimer.start();
-            System.out.println(bot.getName() + " has lives: " + bot.getHealth());
+        Bot currentBot = bots.get(currentPlayerIndex);
 
-            if (!result) {
-                bot.reducePlayerHealth();
-            }
+        // can still answer
+        if(timer.getElapsedTimeSeconds() <= duration){
+            // need to wait for thinking time
+            if (waitTimer.getElapsedTimeSeconds() > 2) {
+                String answer = currentBot.simulateAnswer(bomb);
+                result = currentBot.answer(bomb, answer);
+                // reset wait timer since bot already answered
+                waitTimer.reset();
 
-            if (bot.isDead()) {
-                System.out.println(bot.getName() + " is dead!");
-                bot.setImageDead();
-            }
-
-            if (bots.isEmpty()) {
-                endGame();
+                // answer is correct
+                if (result == 1){
+                    timer.reset();
+                    currentPlayerIndex++;
+                }
             }
         }
+        else {
+            System.out.println("Time is up!\n\n\n");
+            // means that the duration has passed, can only mean that the player did not give correct answer in time
+            // lose a life and check if it died
+            currentBot.reducePlayerHealth();
+            if (currentBot.isDead()) {
+                System.out.println(currentBot.getName() + " is dead!");
+                currentBot.setImageDead();
+                bots.remove(currentBot);
+            }
+            else { // if no one died, go to next index to go to next player
+                currentPlayerIndex++;
+            }
+            if (bots.size() == 1) {
+                endGame();
+            }
+            timer.reset();
+        }
     }
+
+//    private void botsTurn() {
+//        for (Bot bot : bots) {
+//            boolean result = false;
+//
+//            System.out.println(bot.getName() + " has lives: " + bot.getHealth());
+//
+//            String answer = bot.simulateAnswer(bomb);
+//            result = bot.answer(bomb, answer);
+//
+//            if (!result) {
+//                bot.reducePlayerHealth();
+//            }
+//
+//            timer.reset();
+//            if (bot.isDead()) {
+//                System.out.println(bot.getName() + " is dead!");
+//                bot.setImageDead();
+//            }
+//
+//            if (bots.isEmpty()) {
+//                endGame();
+//            }
+//
+//        }
+//
+//    }
 
     public Scene getScene() {
         return this.scene;

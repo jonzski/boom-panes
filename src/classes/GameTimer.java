@@ -1,10 +1,10 @@
 package classes;
 
 public class GameTimer {
-    private long startTime;
+    private long startTime = 0;
 
     public void start() {
-        startTime = System.nanoTime();
+        if (startTime == 0) startTime = System.nanoTime();
     }
 
     public double getElapsedTimeSeconds() {

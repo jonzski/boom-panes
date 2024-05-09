@@ -28,14 +28,14 @@ public class Bot extends Player{
         this.isDead = isDead;
     }
 
-    public boolean answer(Bomb bomb, String answer) {
+    public int answer(Bomb bomb, String answer) {
         System.out.println("Bot " + name + " answered: " + answer);
         if (bomb.checkAnswer(answer)) {
             System.out.println("Correct answer");
-            return true;
+            return 1;
         } else {
             System.out.println("Incorrect answer, try again");
-            return false;
+            return -1;
 
         }
     }
@@ -45,7 +45,7 @@ public class Bot extends Player{
 
         switch (difficulty) {
             case 1:
-                difficultyFactor = 0.0000001; // Low difficulty: 33% chance of correct answer
+                difficultyFactor = 0.33; // Low difficulty: 33% chance of correct answer
                 break;
             case 2:
                 difficultyFactor = 0.5; // Medium difficulty: 50% chance of correct answer
