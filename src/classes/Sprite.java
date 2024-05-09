@@ -43,6 +43,14 @@ public class Sprite {
         return width;
     }
 
+    public double getXPos() {
+        return xPos;
+    }
+
+    public double getYPos() {
+        return yPos;
+    }
+
     public Image getImage() {
         return this.img;
     }

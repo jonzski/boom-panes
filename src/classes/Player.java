@@ -4,6 +4,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.TextAlignment;
 
 import java.util.ArrayList;
 
@@ -14,10 +15,14 @@ public class Player extends Sprite {
     private Boolean isDead;
     private final static Image HEAD = new Image("assets/player-head.png");
     private ArrayList<Health> healthBar;
-    private int scaling;
 
-    public Player(int health, String name, Boolean isDead, double xPos, double yPos, double width, double height) {
-        super(xPos, yPos, width, height, HEAD);
+    private final static int WIDTH = 90;
+    private final static int HEIGHT = 90;
+    private final static int INITIAL_X = 0;
+    private final static int INITIAL_Y = 0;
+
+    public Player(int health, String name, Boolean isDead) {
+        super(INITIAL_X, INITIAL_Y, WIDTH, HEIGHT, HEAD);
         this.health = health;
         this.name = name;
         this.isDead = isDead;
@@ -32,6 +37,7 @@ public class Player extends Sprite {
 
     public void renderName(GraphicsContext gc) {
         gc.setFont(Font.font("Poppins Bold", 40));
+        gc.setTextAlign(TextAlignment.CENTER);
         gc.fillText(this.name, xPos, yPos + height + 30);
         gc.setFill(Color.WHITE);
     }
@@ -46,11 +52,38 @@ public class Player extends Sprite {
         }
     }
 
-    public void setScaling(int scaling) {
-        this.scaling = scaling;
-    }
-
     public String getName() {
         return this.name;
+    }
+
+    public int getHealth() {
+        return this.health;
+    }
+
+    public void setImageDead() {
+//        this.image = new Image("assets/player-head-dead.png");
+    }
+
+    public void setImageTurn() {
+//        this.image = new Image("assets/player-head-turn.png");
+    }
+
+    public void defaultImage() {
+//        this.image = new Image("assets/player-head.png");
+    }
+
+    public boolean isDead() {
+        return this.isDead;
+    }
+
+    public boolean answer(Bomb bomb, String answer) {
+        System.out.println("Player " + name + " answered: " + answer);
+        if (bomb.checkAnswer(answer)) {
+            System.out.println("Correct answer");
+            return true;
+        } else {
+            System.out.println("Incorrect answer, try again");
+            return false;
+        }
     }
 }

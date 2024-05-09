@@ -1,6 +1,8 @@
 package classes;
 
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.text.TextAlignment;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -12,17 +14,21 @@ public class Bomb extends Sprite{
     private boolean isExploded;
     private int explosionCooldown;
     private ArrayList<String> dictionary = new ArrayList<>();
+    private ArrayList<String> answeredWords = new ArrayList<>();
     private String hint;
+    private final static int WIDTH = 200;
+    private final static int HEIGHT = 200;
+    private final static int INITIAL_X = 0;
+    private final static int INITIAL_Y = 0;
 
     private final static Image BOMB = new Image("assets/bomb.png");
 
-
-    public Bomb(boolean isExploded, int explosionCooldown, double xPos, double yPos, double width, double height) {
-        super(xPos, yPos, width, height, BOMB);
+    public Bomb(boolean isExploded, int explosionCooldown) {
+        super(INITIAL_X, INITIAL_Y, WIDTH, HEIGHT, BOMB);
         this.isExploded = isExploded;
         this.explosionCooldown = explosionCooldown;
-        this.hint = randomizeHint();
         initializeDictionary();
+        this.hint = randomizeHint();
     }
 
     public void initializeDictionary() {
@@ -32,13 +38,13 @@ public class Bomb extends Sprite{
                 String word = scanner.nextLine();
                 if (word.length() > 3) {
                     dictionary.add(word);
-
                 }
             }
         } catch (FileNotFoundException e) {
             System.out.println("File not found");
         }
-        System.out.println("Done initializing dictionary");
+        System.out.println("Done initializing dictionary" + dictionary.size());
+
     }
 
     private String randomizeHint() {
@@ -53,13 +59,19 @@ public class Bomb extends Sprite{
     }
 
     public boolean checkAnswer(String answer){
-        if (dictionary.contains(answer)){
+        if (dictionary.contains(answer) && !answeredWords.contains(answer)){
             if(answer.contains(hint)){
                 this.hint = randomizeHint();
+                this.answeredWords.add(answer);
                 return true;
             }
         }
         return false;
+    }
+
+    public void renderHint(GraphicsContext gc){
+        gc.setTextAlign(TextAlignment.CENTER);
+        gc.fillText(hint, xPos + getWidth() / 2, yPos + getHeight() / 2);
     }
 
     public void explode(){
