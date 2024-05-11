@@ -10,7 +10,7 @@ import scenes.*;
 public class SceneController {
 
 	private Stage stage;
-	double x, y = 0;
+
 	Menu menu;
 	SingleLobby singleLobby;
 	SingleRoom singleGame;
@@ -44,7 +44,6 @@ public class SceneController {
 		stage = (Stage)((Node)event.getSource()).getScene().getWindow();
 		stage.setScene(lobby.getScene());
 		stage.show();
-		singleGame.start();
 	}
 
 	public void exitGame(){
