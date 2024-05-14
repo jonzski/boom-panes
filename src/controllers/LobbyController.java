@@ -74,7 +74,7 @@ public class LobbyController implements Initializable {
 
             Text text = new Text(message);
             TextFlow textFlow = new TextFlow(text);
-
+            textFlow.setPadding(new Insets(5, 10, 5, 10));
             textFlow.setStyle("-fx-color: rgb(239,242,255); -fx-background-color: rgb(15,125, 242); -fx-background-radius: 20px;");
             text.setFill(Color.color(0.934, 0.935, 0.996));
 
@@ -105,7 +105,7 @@ public class LobbyController implements Initializable {
 
         Text text = new Text(message);
         TextFlow textFlow = new TextFlow(text);
-        textFlow.setStyle("-fx-color: rgb(239,242,255); -fx-background-color: rgb(15,125, 242); -fx-background-radius: 20px;");
+        textFlow.setStyle("-fx-color: rgb(239,242,255); -fx-background-color: rgb(101,101,101); -fx-background-radius: 20px;");
         text.setFill(Color.color(0.934, 0.935, 0.996));
         textFlow.setPadding(new Insets(5, 10, 5, 10));
         hBox.getChildren().add(textFlow);
@@ -118,9 +118,15 @@ public class LobbyController implements Initializable {
 
     public void setServer(Server server) {
         this.server = server;
+        if (server != null) {
+            server.receiveMessageFromClient(chatBox);
+        }
     }
 
     public void setClient(Client client) {
         this.client = client;
+        if (client != null) {
+            client.receiveMessageFromServer(chatBox);
+        }
     }
 }

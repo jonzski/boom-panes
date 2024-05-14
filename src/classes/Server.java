@@ -20,7 +20,6 @@ public class Server {
             this.socket = serverSocket.accept();
             this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-            receiveMessageFromClient(new VBox());
         } catch (IOException e) {
             System.out.println("Error creating server");
             e.printStackTrace();

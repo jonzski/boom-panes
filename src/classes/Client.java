@@ -17,7 +17,6 @@ public class Client {
             this.socket = socket;
             this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-            receiveMessageFromServer(new VBox());
         } catch (IOException e) {
             System.out.println("Error creating client");
             e.printStackTrace();
