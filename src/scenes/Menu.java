@@ -9,7 +9,7 @@ import javafx.stage.Stage;
 
 public class Menu {
 
-	private Stage stage;
+	private static Stage stage;
 	private Scene scene;
 	private Parent root;
 
@@ -32,10 +32,6 @@ public class Menu {
 
 	public Scene getScene() {
 		return this.scene;
-	}
-	
-	public Stage getStage() {
-		return this.stage;
 	}
 
 }
