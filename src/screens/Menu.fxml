@@ -1,68 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
-<?import javafx.scene.shape.Rectangle?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.layout.VBox?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.MenuController">
    <children>
       <Pane prefHeight="720.0" prefWidth="1280.0">
          <children>
-            <ImageView fitHeight="752.0" fitWidth="1280.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="758.0" fitWidth="1488.0" layoutX="-191.0" layoutY="-28.0">
                <image>
-                  <Image url="@../assets/Backgrounds/main-menu-bg.png" />
+                  <Image url="@../assets/Backgrounds/pxsprite-space.gif" />
                </image>
             </ImageView>
-            <ImageView fitHeight="531.0" fitWidth="531.0" layoutX="-102.0" layoutY="135.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="boom" fitHeight="239.0" fitWidth="417.0" layoutX="430.0" layoutY="37.0" onMouseClicked="#boomClickFunc">
                <image>
-                  <Image url="@../assets/bomb.png" />
+                  <Image url="@../assets/logo.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="80.0" fitWidth="760.0" layoutX="580.0" layoutY="198.0" onMouseClicked="#switchToLobbySingle" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../assets/Buttons/single.png" />
-               </image>
-            </ImageView>
-            <ImageView fitHeight="80.0" fitWidth="760.0" layoutX="580.0" layoutY="301.0" onMouseClicked="#switchToCreateJoin" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../assets/Buttons/muti.png" />
-               </image>
-            </ImageView>
-            <ImageView fitHeight="80.0" fitWidth="760.0" layoutX="580.0" layoutY="402.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../assets/Buttons/setting.png" />
-               </image>
-            </ImageView>
-            <ImageView fitHeight="80.0" fitWidth="760.0" layoutX="580.0" layoutY="508.0" onMouseClicked="#exitGame" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../assets/Buttons/exit.png" />
-               </image>
-            </ImageView>
-            <Label layoutX="696.0" layoutY="210.0" onMouseClicked="#switchToLobbySingle" text="Single Player" textFill="WHITE">
-               <font>
-                  <Font name="Poppins Regular" size="40.0" />
-               </font>
-            </Label>
-            <Label layoutX="703.0" layoutY="313.0" text="Battle" textFill="WHITE">
-               <font>
-                  <Font name="Poppins Regular" size="40.0" />
-               </font>
-            </Label>
-            <Label layoutX="703.0" layoutY="414.0" text="Settings" textFill="WHITE">
-               <font>
-                  <Font name="Poppins Regular" size="40.0" />
-               </font>
-            </Label>
-            <Label layoutX="703.0" layoutY="520.0" onMouseClicked="#exitGame" text="Quit" textFill="WHITE">
-               <font>
-                  <Font name="Poppins Regular" size="40.0" />
-               </font>
-            </Label>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#495251" height="80.0" layoutY="647.0" stroke="TRANSPARENT" strokeType="INSIDE" width="1280.0" />
+            <VBox layoutX="453.0" layoutY="317.0" prefHeight="200.0" prefWidth="240.0">
+               <children>
+                  <ImageView fx:id="single" fitHeight="221.0" fitWidth="382.0" onMouseEntered="#hoverSingle" onMouseExited="#exitSingle" onMousePressed="#switchToLobbySingle" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../assets/Buttons/single.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="battle" fitHeight="221.0" fitWidth="382.0" onMouseEntered="#hoverBattle" onMouseExited="#exitBattle" onMouseReleased="#switchToCreateJoin" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../assets/Buttons/battle.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="about" fitHeight="221.0" fitWidth="382.0" onMouseEntered="#hoverAbout" onMouseExited="#exitAbout" onMousePressed="#switchToAbout" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../assets/Buttons/about.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="exit" fitHeight="221.0" fitWidth="382.0" onMouseDragReleased="#exitGame" onMouseEntered="#hoverQuit" onMouseExited="#exitQuit" onMouseReleased="#exitGame" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../assets/Buttons/Quit.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </VBox>
          </children>
       </Pane>
    </children>
