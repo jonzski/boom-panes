@@ -29,9 +29,9 @@ public class SingleRoom extends AnimationTimer {
 
     private final int difficulty = 1;
     private final int health = 3;
-    private final int duration = 3;
+    private final int duration = 10;
     private final int numBots = 3;
-    private final int botsThinkingTime = 1;
+    private final int botsThinkingTime = 3;
 
     private int currentPlayerIndex = 0;
     private int playerIndex = 0;
@@ -170,7 +170,7 @@ public class SingleRoom extends AnimationTimer {
 
     private void simulateAnswer() {
         currentPlayerIndex = currentPlayerIndex % players.size();
-        this.playerAnswer = null;
+        String bufferPlayerAnswer = answerField.getText();
         // if bots turn and is thinking, do nothing
         if(players.get(currentPlayerIndex) instanceof Bot && waitTimer.getElapsedTimeSeconds() < botsThinkingTime){
             return;
@@ -198,7 +198,6 @@ public class SingleRoom extends AnimationTimer {
 
         // if currentPlayer is a Bot
         if(players.get(currentPlayerIndex) instanceof Bot currentBot){
-            System.out.println("HELLOOOOO\n\n\n\n\n");
             String answer = currentBot.simulateAnswer(bomb);
             result = currentBot.answer(bomb, answer);
             // reset wait timer since bot already answered
@@ -209,17 +208,17 @@ public class SingleRoom extends AnimationTimer {
         // if currentPlayer is a player
         else {
             Player currentPlayer = players.get(currentPlayerIndex);
-            System.out.println("IS A PLAYER\n\n\n\n");
             waitTimer.reset();
 
             answerField.setOnKeyPressed(event -> {
                 if (event.getCode() == KeyCode.ENTER) {
-                    this.playerAnswer = answerField.getText();
+                    this.playerAnswer = bufferPlayerAnswer;
                 }
             });
 
             result = currentPlayer.answer(bomb, playerAnswer);
         }
+
         if (result == 1){
             timer.reset();
             currentPlayerIndex++;
