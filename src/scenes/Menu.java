@@ -24,7 +24,7 @@ public class Menu {
 	public void setMenu(Stage stage) {
 		this.stage = stage;
 		this.stage.setResizable(false);
-		this.stage.setTitle("Boom ol");
+		this.stage.setTitle("Boom Panes");
 		this.stage.setScene(this.scene);
 		this.stage.centerOnScreen();
 		this.stage.show();

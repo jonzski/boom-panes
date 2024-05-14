@@ -17,6 +17,7 @@ public class SceneController {
 	Menu menu;
 	SingleLobby singleLobby;
 	SingleRoom singleGame;
+	About aboutPage;
 
 	Image singleHover = new Image("assets/Buttons/singleHover.png");
 	Image singleImg = new Image("assets/Buttons/single.png");
@@ -66,6 +67,14 @@ public class SceneController {
 		singleGame.start();
 	}
 
+	public void switchToAbout(MouseEvent event) throws IOException{
+		aboutPage = new About();
+		stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+		stage.setScene(singleGame.getScene());
+		stage.show();
+		singleGame.start();
+	}
+
 	public void exitGame(){
 		System.exit(1);
 	}
@@ -105,8 +114,6 @@ public class SceneController {
 	public void boomClickFunc (MouseEvent event) {
 		boom.setImage(boomClick);
 	}
-	
-
 }
 
 

@@ -32,7 +32,7 @@
                         <Image url="@../assets/Buttons/battle.png" />
                      </image>
                   </ImageView>
-                  <ImageView fx:id="about" fitHeight="221.0" fitWidth="382.0" onMouseEntered="#hoverAbout" onMouseExited="#exitAbout" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="about" fitHeight="221.0" fitWidth="382.0" onMouseEntered="#hoverAbout" onMouseExited="#exitAbout" onMousePressed="#switchToAbout" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../assets/Buttons/about.png" />
                      </image>
