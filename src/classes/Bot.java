@@ -28,17 +28,17 @@ public class Bot extends Player{
         this.isDead = isDead;
     }
 
-    public int answer(Bomb bomb, String answer) {
-        System.out.println("Bot " + name + " answered: " + answer);
-        if (bomb.checkAnswer(answer)) {
-            System.out.println("Correct answer");
-            return 1;
-        } else {
-            System.out.println("Incorrect answer, try again");
-            return -1;
-
-        }
-    }
+//    public int answer(Bomb bomb, String answer) {
+//        System.out.println("Bot " + name + " answered: " + answer);
+//        if (bomb.checkAnswer(answer)) {
+//            System.out.println("Correct answer");
+//            return 1;
+//        } else {
+//            System.out.println("Incorrect answer, try again");
+//            return -1;
+//
+//        }
+//    }
 
     public String simulateAnswer(Bomb bomb) {
         double difficultyFactor = 0.0;

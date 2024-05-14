@@ -15,8 +15,10 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Scanner;
 
 public class SingleRoom extends AnimationTimer {
 
@@ -26,12 +28,14 @@ public class SingleRoom extends AnimationTimer {
     private Group root;
     private Canvas canvas;
 
-    private int difficulty = 1;
-    private int health = 3;
-    private int duration = 3;
-    private int numBots = 3;
+    private final int difficulty = 1;
+    private final int health = 3;
+    private final int duration = 3;
+    private final int numBots = 3;
+    private final int botsThinkingTime = 1;
 
     private int currentPlayerIndex = 0;
+    private int playerIndex = 0;
 
     private Player player;
     private Bomb bomb;
@@ -45,6 +49,7 @@ public class SingleRoom extends AnimationTimer {
     private GameTimer timer;
     private GameTimer waitTimer;
 
+    private ArrayList<Player> players = new ArrayList<>();
     private ArrayList<Bot> bots;
     private Image background = new Image("assets/Backgrounds/battleroom-bg.png");
 
@@ -56,10 +61,18 @@ public class SingleRoom extends AnimationTimer {
         this.root.getChildren().add(this.canvas);
         this.timer = new GameTimer();
         this.waitTimer = new GameTimer();
+
         this.initializeBots();
         this.initializePlayer();
         this.placePlayerInCircle();
         this.initializeBomb();
+
+        this.initializeLobbyPlayers();
+    }
+
+    private void initializeLobbyPlayers(){
+        this.players.add(this.player);
+        this.players.addAll(this.bots);
     }
 
     private void initializePlayer() {
@@ -112,21 +125,7 @@ public class SingleRoom extends AnimationTimer {
         waitTimer.start();
 //        System.out.println(currentPlayerIndex);
         // let current player answer his turn
-        System.out.println(currentPlayerIndex + "\t" + timer.getElapsedTimeSeconds() + "\t" + waitTimer.getElapsedTimeSeconds());
-        if(isRunning) {
-            try {
-                simulateAnswer();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        else {
-            try {
-                endGame();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
+        if(isRunning) simulateAnswer();
     }
 
     private void renderBots() {
@@ -177,14 +176,49 @@ public class SingleRoom extends AnimationTimer {
         int result = 0;
 
         // adjust player index
-        currentPlayerIndex = currentPlayerIndex % bots.size();
+        currentPlayerIndex = currentPlayerIndex % players.size();
 
-        Bot currentBot = bots.get(currentPlayerIndex);
+        if (currentPlayerIndex == this.playerIndex && !this.player.isDead()) {
+//             player's turn
+            Player currentPlayer = this.players.get(currentPlayerIndex);
+            // to catch when bot is in index 0 since player died;
+
+            Scanner scanner = new Scanner(System.in);
+            String playerAnswer = scanner.nextLine();
+//            scanner.close();
+            System.out.println(result);
+
+            result = currentPlayer.answer(bomb, playerAnswer);
+            System.out.println("isCorrect: " + result);
+
+            if (result == 1) {
+                // reset timers
+                timer.reset();
+                waitTimer.reset();
+                currentPlayerIndex++;
+                return;
+            }
+
+            else if (result == -1) {
+                timer.reset();
+                waitTimer.reset();
+                currentPlayer.reducePlayerHealth();
+                if(currentPlayer.isDead()) {
+                    this.players.remove(currentPlayer);
+                    return;
+                }
+                currentPlayerIndex++;
+                return;
+            }
+
+        }
+
+        Bot currentBot = (Bot)players.get(currentPlayerIndex);
 
         // can still answer
         if(timer.getElapsedTimeSeconds() <= duration){
             // need to wait for thinking time
-            if (waitTimer.getElapsedTimeSeconds() > 1) {
+            if (waitTimer.getElapsedTimeSeconds() > botsThinkingTime) {
                 String answer = currentBot.simulateAnswer(bomb);
                 result = currentBot.answer(bomb, answer);
                 // reset wait timer since bot already answered
@@ -205,23 +239,18 @@ public class SingleRoom extends AnimationTimer {
             if (currentBot.isDead()) {
                 System.out.println(currentBot.getName() + " is dead!");
                 currentBot.setImageDead();
-                bots.remove(currentBot);
+                players.remove(currentBot);
             }
             else { // if no one died, go to next index to go to next player
                 currentPlayerIndex++;
             }
-            if (bots.size() == 1) {
+            if (players.size() == 1) {
                 endGame();
 
             }
             timer.reset();
         }
     }
-
-    public void switchToVictoryScreen() throws IOException {
-        System.out.println(stage);
-    }
-
 
     public Scene getScene() {
         return this.scene;
