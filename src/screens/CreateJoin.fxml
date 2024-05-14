@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.CreateJoinController">
+   <children>
+      <ImageView fitHeight="720.0" fitWidth="1280.0" layoutX="-3.0" layoutY="8.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../assets/Backgrounds/battleroom-bg.png" />
+         </image>
+      </ImageView>
+      <Button layoutX="373.0" layoutY="339.0" mnemonicParsing="false" onMouseClicked="#switchToServerLobby" prefHeight="84.0" prefWidth="175.0" text="Create Room">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Button>
+      <Button layoutX="728.0" layoutY="339.0" mnemonicParsing="false" onMouseClicked="#switchToClientLobby" prefHeight="84.0" prefWidth="175.0" text="Join Room">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Button>
+   </children>
+</AnchorPane>

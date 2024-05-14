@@ -1,29 +1,44 @@
 package scenes;
-
-import classes.GameTimer;
+import classes.Client;
+import classes.Server;
+import controllers.LobbyController;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
 import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
 
 public class Lobby {
 
-    private Scene scene;
     private Parent root;
+    private Scene scene;
+    private LobbyController controller;
 
-    private int health;
-    private int duration;
-    private int difficulty;
-    private int numPlayers;
+    private Server server;
+    private Client client;
 
-    public Lobby() throws IOException {
-        this.root = FXMLLoader.load(getClass().getResource("../screens/Lobby.fxml"));
+    public Lobby(boolean isServer) throws IOException {
+        System.out.println("Lobby created");
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("../screens/Lobby.fxml"));
+        this.root = loader.load();
         this.scene = new Scene(root, Menu.WINDOW_WIDTH, Menu.WINDOW_HEIGHT);
+        this.controller = loader.getController();
+        this.controller.setIsServer(isServer);
+
+        if (isServer) {
+            this.server = new Server(new ServerSocket(1234));
+            this.controller.setServer(server);
+            System.out.println("Server connected");
+        } else {
+            this.client = new Client(new Socket("localhost", 1234));
+            this.controller.setClient(client);
+            System.out.println("Client connected");
+        }
     }
 
     public Scene getScene() {
         return scene;
     }
+
 }

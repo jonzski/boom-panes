@@ -6,11 +6,13 @@ import classes.GameTimer;
 import classes.Player;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.lang.reflect.Array;
@@ -20,6 +22,7 @@ import java.util.Scanner;
 
 public class SingleRoom extends AnimationTimer {
 
+    private Stage stage;
     private GraphicsContext gc;
     private Scene scene;
     private Group root;
@@ -39,7 +42,7 @@ public class SingleRoom extends AnimationTimer {
 
     private final static int WINDOW_WIDTH = 1280;
     private final static int WINDOW_HEIGHT = 720;
-    private boolean isRunning = true;
+    private boolean isRunning = false;
 
     private TextField answerField;
 
@@ -161,11 +164,14 @@ public class SingleRoom extends AnimationTimer {
         gc.drawImage(background, 0, 0);
     }
 
-    private void endGame() {
+    private void endGame() throws IOException {
         isRunning = false;
+        timer.reset();
+        waitTimer.reset();
+        switchToVictoryScreen();
     }
 
-    private void simulateAnswer() {
+    private void simulateAnswer() throws IOException {
         // initialize result
         int result = 0;
 
@@ -240,6 +246,7 @@ public class SingleRoom extends AnimationTimer {
             }
             if (players.size() == 1) {
                 endGame();
+
             }
             timer.reset();
         }
