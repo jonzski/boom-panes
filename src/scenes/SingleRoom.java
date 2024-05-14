@@ -16,9 +16,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Random;
-import java.util.Scanner;
+import java.util.*;
 
 public class SingleRoom extends AnimationTimer {
 
@@ -178,12 +176,13 @@ public class SingleRoom extends AnimationTimer {
         // adjust player index
         currentPlayerIndex = currentPlayerIndex % players.size();
 
-        if (currentPlayerIndex == this.playerIndex && !this.player.isDead()) {
+        if (currentPlayerIndex == this.playerIndex && !this.player.isDead() && timer.getElapsedTimeSeconds() < duration) {
 //             player's turn
             Player currentPlayer = this.players.get(currentPlayerIndex);
             // to catch when bot is in index 0 since player died;
 
             Scanner scanner = new Scanner(System.in);
+            
             String playerAnswer = scanner.nextLine();
 //            scanner.close();
             System.out.println(result);
@@ -195,8 +194,9 @@ public class SingleRoom extends AnimationTimer {
                 // reset timers
                 timer.reset();
                 waitTimer.reset();
+
+                // proceed to next player
                 currentPlayerIndex++;
-                return;
             }
 
             else if (result == -1) {
@@ -210,7 +210,6 @@ public class SingleRoom extends AnimationTimer {
                 currentPlayerIndex++;
                 return;
             }
-
         }
 
         Bot currentBot = (Bot)players.get(currentPlayerIndex);
