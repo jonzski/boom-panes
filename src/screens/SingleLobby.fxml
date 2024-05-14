@@ -9,42 +9,115 @@
 
 <AnchorPane prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.SingleLobbyController">
    <children>
-      <ImageView fitHeight="720.0" fitWidth="1280.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="720.0" fitWidth="1280.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../assets/Backgrounds/main-menu-bg.png" />
+            <Image url="@../assets/Backgrounds/pxsprite-space.gif" />
          </image>
       </ImageView>
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#00000080" height="128.0" layoutY="71.0" stroke="TRANSPARENT" strokeType="INSIDE" width="1280.0" />
-      <Label layoutX="120.0" layoutY="90.0" text="Single Player" textFill="WHITE">
+      <ImageView fitHeight="64.0" fitWidth="816.0" layoutX="73.0" layoutY="103.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../assets/single label.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="40.0" fitWidth="138.0" layoutX="35.0" layoutY="647.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../assets/Buttons/back.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="43.0" fitWidth="187.0" layoutX="1070.0" layoutY="646.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../assets/Buttons/start.png" />
+         </image>
+      </ImageView>
+      <Label layoutX="408.0" layoutY="652.0" text="Please select number of players." textFill="WHITE">
          <font>
-            <Font name="Poppins Regular" size="64.0" />
+            <Font name="Montserrat ExtraBold" size="25.0" />
          </font>
       </Label>
-      <ImageView fitHeight="64.0" fitWidth="1080.0" layoutX="200.0" layoutY="276.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="81.0" fitWidth="50.0" layoutX="332.0" layoutY="231.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../assets/Buttons/Player.png" />
+            <Image url="@../assets/Buttons/backbutton.png" />
          </image>
       </ImageView>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#495251" height="80.0" layoutY="640.0" stroke="TRANSPARENT" strokeType="INSIDE" width="1280.0" />
-      <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fitHeight="48.0" fitWidth="48.0" layoutX="14.0" layoutY="662.0" onMouseClicked="#switchToMenu" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="60.0" fitWidth="53.0" layoutX="849.0" layoutY="226.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../assets/Buttons/arrow.png" />
+            <Image url="@../assets/Buttons/nextbutton.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="48.0" fitWidth="48.0" layoutX="1205.0" layoutY="662.0" nodeOrientation="RIGHT_TO_LEFT" onMouseClicked="#switchToSingleGame" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="81.0" fitWidth="50.0" layoutX="332.0" layoutY="309.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../assets/Buttons/arrow.png" />
+            <Image url="@../assets/Buttons/backbutton.png" />
          </image>
       </ImageView>
-      <Label layoutX="86.0" layoutY="666.0" text="BACK" textFill="WHITE">
+      <ImageView fitHeight="60.0" fitWidth="53.0" layoutX="848.0" layoutY="301.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../assets/Buttons/nextbutton.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="81.0" fitWidth="50.0" layoutX="332.0" layoutY="387.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../assets/Buttons/backbutton.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="60.0" fitWidth="53.0" layoutX="848.0" layoutY="383.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../assets/Buttons/nextbutton.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="81.0" fitWidth="50.0" layoutX="331.0" layoutY="468.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../assets/Buttons/backbutton.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="60.0" fitWidth="53.0" layoutX="849.0" layoutY="461.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../assets/Buttons/nextbutton.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="81.0" fitWidth="50.0" layoutX="332.0" layoutY="545.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../assets/Buttons/backbutton.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="60.0" fitWidth="53.0" layoutX="849.0" layoutY="547.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../assets/Buttons/nextbutton.png" />
+         </image>
+      </ImageView>
+      <Label layoutX="517.0" layoutY="305.0" prefHeight="48.0" prefWidth="17.0" text="1" textFill="WHITE">
          <font>
-            <Font name="Poppins Bold" size="24.0" />
+            <Font name="Montserrat ExtraBold" size="45.0" />
          </font>
       </Label>
-      <Label layoutX="1121.0" layoutY="666.0" text="START" textFill="WHITE">
+      <Label layoutX="527.0" layoutY="230.0" prefHeight="56.0" prefWidth="265.0" text="PLAYER/S" textFill="WHITE">
          <font>
-            <Font name="Poppins Bold" size="24.0" />
+            <Font name="Montserrat ExtraBold" size="45.0" />
+         </font>
+      </Label>
+      <Label layoutX="474.0" layoutY="231.0" prefHeight="56.0" prefWidth="1.0" text="1" textFill="WHITE">
+         <font>
+            <Font name="Montserrat ExtraBold" size="45.0" />
+         </font>
+      </Label>
+      <Label layoutX="569.0" layoutY="303.0" prefHeight="56.0" prefWidth="143.0" text="SET/S" textFill="WHITE">
+         <font>
+            <Font name="Montserrat ExtraBold" size="45.0" />
+         </font>
+      </Label>
+      <Label layoutX="549.0" layoutY="382.0" prefHeight="56.0" prefWidth="143.0" text="EASY" textFill="WHITE">
+         <font>
+            <Font name="Montserrat ExtraBold" size="45.0" />
+         </font>
+      </Label>
+      <Label layoutX="459.0" layoutY="463.0" prefHeight="56.0" prefWidth="317.0" text="DURATION: 5" textFill="WHITE">
+         <font>
+            <Font name="Montserrat ExtraBold" size="45.0" />
+         </font>
+      </Label>
+      <Label layoutX="524.0" layoutY="544.0" prefHeight="56.0" prefWidth="199.0" text="LIVES: 3" textFill="WHITE">
+         <font>
+            <Font name="Montserrat ExtraBold" size="45.0" />
          </font>
       </Label>
    </children>
