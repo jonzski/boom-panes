@@ -20,12 +20,12 @@
             <Image url="@../assets/single label.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="40.0" fitWidth="138.0" layoutX="35.0" layoutY="647.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="40.0" fitWidth="138.0" layoutX="35.0" layoutY="647.0" pickOnBounds="true" preserveRatio="true" onMouseClicked="#switchToMenu">
          <image>
             <Image url="@../assets/Buttons/back.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="43.0" fitWidth="187.0" layoutX="1070.0" layoutY="646.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="43.0" fitWidth="187.0" layoutX="1070.0" layoutY="646.0" pickOnBounds="true" preserveRatio="true" onMouseClicked="#switchToSingleGame">
          <image>
             <Image url="@../assets/Buttons/start.png" />
          </image>
