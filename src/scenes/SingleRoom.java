@@ -6,25 +6,26 @@ import classes.GameTimer;
 import classes.Player;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
+import javafx.scene.input.KeyCode;
 
 import java.io.IOException;
 import java.lang.reflect.Array;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Random;
+import java.util.Scanner;
 
 public class SingleRoom extends AnimationTimer {
 
-    private Stage stage;
     private GraphicsContext gc;
     private Scene scene;
     private Group root;
     private Canvas canvas;
+    private TextField answerField;
 
     private final int difficulty = 1;
     private final int health = 3;
@@ -40,9 +41,7 @@ public class SingleRoom extends AnimationTimer {
 
     private final static int WINDOW_WIDTH = 1280;
     private final static int WINDOW_HEIGHT = 720;
-    private boolean isRunning = false;
-
-    private TextField answerField;
+    private boolean isRunning = true;
 
     private GameTimer timer;
     private GameTimer waitTimer;
@@ -50,13 +49,16 @@ public class SingleRoom extends AnimationTimer {
     private ArrayList<Player> players = new ArrayList<>();
     private ArrayList<Bot> bots;
     private Image background = new Image("assets/Backgrounds/battleroom-bg.png");
+    private String playerAnswer;
 
     public SingleRoom() throws IOException {
         this.canvas = new Canvas(SingleRoom.WINDOW_WIDTH, SingleRoom.WINDOW_HEIGHT);
         this.gc = this.canvas.getGraphicsContext2D();
         this.root = new Group();
+        this.answerField = new TextField();
         this.scene = new Scene(root, SingleRoom.WINDOW_WIDTH, SingleRoom.WINDOW_HEIGHT);
         this.root.getChildren().add(this.canvas);
+        this.root.getChildren().add(this.answerField);
         this.timer = new GameTimer();
         this.waitTimer = new GameTimer();
 
@@ -162,97 +164,69 @@ public class SingleRoom extends AnimationTimer {
         gc.drawImage(background, 0, 0);
     }
 
-    private void endGame() throws IOException {
+    private void endGame() {
         isRunning = false;
-        timer.reset();
-        waitTimer.reset();
-        switchToVictoryScreen();
     }
 
-    private void simulateAnswer() throws IOException {
+    private void simulateAnswer() {
+        currentPlayerIndex = currentPlayerIndex % players.size();
+        this.playerAnswer = null;
+        // if bots turn and is thinking, do nothing
+        if(players.get(currentPlayerIndex) instanceof Bot && waitTimer.getElapsedTimeSeconds() < botsThinkingTime){
+            return;
+        }
+
+        // if duration has elapsed, proceed to next player;
+        if(timer.getElapsedTimeSeconds() > duration){
+            timer.reset();
+            players.get(currentPlayerIndex).reducePlayerHealth();
+            if (players.get(currentPlayerIndex).isDead()) {
+                System.out.println(players.get(currentPlayerIndex).getName() + " is dead!");
+                players.get(currentPlayerIndex).setImageDead();
+                players.remove(players.get(currentPlayerIndex));
+                if (players.size() == 1) endGame();
+            }
+            else {
+                currentPlayerIndex++;
+            }
+            return;
+        }
+
+        // this part of code means: has not elapsed duration and bots are able to answer
         // initialize result
         int result = 0;
 
-        // adjust player index
-        currentPlayerIndex = currentPlayerIndex % players.size();
+        // if currentPlayer is a Bot
+        if(players.get(currentPlayerIndex) instanceof Bot currentBot){
+            System.out.println("HELLOOOOO\n\n\n\n\n");
+            String answer = currentBot.simulateAnswer(bomb);
+            result = currentBot.answer(bomb, answer);
+            // reset wait timer since bot already answered
+            waitTimer.reset();
 
-        if (currentPlayerIndex == this.playerIndex && !this.player.isDead() && timer.getElapsedTimeSeconds() < duration) {
-//             player's turn
-            Player currentPlayer = this.players.get(currentPlayerIndex);
-            // to catch when bot is in index 0 since player died;
+            // answer is correct
+        }
+        // if currentPlayer is a player
+        else {
+            Player currentPlayer = players.get(currentPlayerIndex);
+            System.out.println("IS A PLAYER\n\n\n\n");
+            waitTimer.reset();
 
-            Scanner scanner = new Scanner(System.in);
-            
-            String playerAnswer = scanner.nextLine();
-//            scanner.close();
-            System.out.println(result);
+            answerField.setOnKeyPressed(event -> {
+                if (event.getCode() == KeyCode.ENTER) {
+                    this.playerAnswer = answerField.getText();
+                }
+            });
 
             result = currentPlayer.answer(bomb, playerAnswer);
-            System.out.println("isCorrect: " + result);
-
-            if (result == 1) {
-                // reset timers
-                timer.reset();
-                waitTimer.reset();
-
-                // proceed to next player
-                currentPlayerIndex++;
-            }
-
-            else if (result == -1) {
-                timer.reset();
-                waitTimer.reset();
-                currentPlayer.reducePlayerHealth();
-                if(currentPlayer.isDead()) {
-                    this.players.remove(currentPlayer);
-                    return;
-                }
-                currentPlayerIndex++;
-                return;
-            }
         }
-
-        Bot currentBot = (Bot)players.get(currentPlayerIndex);
-
-        // can still answer
-        if(timer.getElapsedTimeSeconds() <= duration){
-            // need to wait for thinking time
-            if (waitTimer.getElapsedTimeSeconds() > botsThinkingTime) {
-                String answer = currentBot.simulateAnswer(bomb);
-                result = currentBot.answer(bomb, answer);
-                // reset wait timer since bot already answered
-                waitTimer.reset();
-
-                // answer is correct
-                if (result == 1){
-                    timer.reset();
-                    currentPlayerIndex++;
-                }
-            }
-        }
-        else {
-            System.out.println("Time is up!\n\n\n");
-            // means that the duration has passed, can only mean that the player did not give correct answer in time
-            // lose a life and check if it died
-            currentBot.reducePlayerHealth();
-            if (currentBot.isDead()) {
-                System.out.println(currentBot.getName() + " is dead!");
-                currentBot.setImageDead();
-                players.remove(currentBot);
-            }
-            else { // if no one died, go to next index to go to next player
-                currentPlayerIndex++;
-            }
-            if (players.size() == 1) {
-                endGame();
-
-            }
+        if (result == 1){
             timer.reset();
+            currentPlayerIndex++;
         }
     }
 
     public Scene getScene() {
         return this.scene;
     }
-
 }
