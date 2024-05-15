@@ -11,7 +11,7 @@ import java.util.ArrayList;
 public class Player extends Sprite {
 
     private int health;
-    private String name;
+    public String name;
     private Boolean isDead;
     private final static Image HEAD = new Image("assets/player-head.png");
     private ArrayList<Health> healthBar;
@@ -21,11 +21,9 @@ public class Player extends Sprite {
     private final static int INITIAL_X = 0;
     private final static int INITIAL_Y = 0;
 
-    public Player(int health, String name, Boolean isDead) {
+    public Player(String name) {
         super(INITIAL_X, INITIAL_Y, WIDTH, HEIGHT, HEAD);
-        this.health = health;
         this.name = name;
-        this.isDead = isDead;
     }
 
     public void reducePlayerHealth() {
@@ -52,24 +50,20 @@ public class Player extends Sprite {
         }
     }
 
+    public void setHealth (int health) {
+        this.health = health;
+    }
+
+    public void setStatus (Boolean isDead) {
+        this.isDead = isDead;
+    }
+
     public String getName() {
         return this.name;
     }
 
     public int getHealth() {
         return this.health;
-    }
-
-    public void setImageDead() {
-//        this.image = new Image("assets/player-head-dead.png");
-    }
-
-    public void setImageTurn() {
-//        this.image = new Image("assets/player-head-turn.png");
-    }
-
-    public void defaultImage() {
-//        this.image = new Image("assets/player-head.png");
     }
 
     public boolean isDead() {

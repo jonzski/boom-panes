@@ -129,4 +129,8 @@ public class LobbyController implements Initializable {
             client.receiveMessageFromServer(chatBox);
         }
     }
+
+    public VBox getChatBox() {
+        return chatBox;
+    }
 }

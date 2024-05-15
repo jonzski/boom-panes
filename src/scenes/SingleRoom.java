@@ -76,14 +76,17 @@ public class SingleRoom extends AnimationTimer {
     }
 
     private void initializePlayer() {
-        this.player = new Player(this.health, "Player", false);
+        this.player = new Player("Player");
+        this.player.setHealth(this.health);
+        this.player.setStatus(false);
     }
 
     public void initializeBots() {
         this.bots = new ArrayList<>();
         for (int i = 0; i < this.numBots; i++) {
-            int scaling = (int) ((double) i / (this.numBots - 1) * 4); // calculate scaling value
-            this.bots.add(new Bot(this.health, "Bot " + i, false, this.difficulty));
+            this.bots.add(new Bot("Bot " + i, this.difficulty));
+            this.bots.get(i).setHealth(this.health);
+            this.bots.get(i).setStatus(false);
         }
     }
 
@@ -182,7 +185,7 @@ public class SingleRoom extends AnimationTimer {
             players.get(currentPlayerIndex).reducePlayerHealth();
             if (players.get(currentPlayerIndex).isDead()) {
                 System.out.println(players.get(currentPlayerIndex).getName() + " is dead!");
-                players.get(currentPlayerIndex).setImageDead();
+//                players.get(currentPlayerIndex).setImageDead();
                 players.remove(players.get(currentPlayerIndex));
                 if (players.size() == 1) endGame();
             }

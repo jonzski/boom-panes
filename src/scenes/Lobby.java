@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Scanner;
 
 public class Lobby {
 
@@ -17,6 +18,7 @@ public class Lobby {
 
     private Server server;
     private Client client;
+    private String username;
 
     public Lobby(boolean isServer) throws IOException {
         System.out.println("Lobby created");
@@ -27,13 +29,18 @@ public class Lobby {
         this.controller.setIsServer(isServer);
 
         if (isServer) {
-            this.server = new Server(new ServerSocket(1234));
+            Scanner scanner = new Scanner(System.in);
+            System.out.println("Enter username: ");
+            this.username = scanner.nextLine();
+            this.server = new Server(new ServerSocket(1234), username);
             this.controller.setServer(server);
-            System.out.println("Server connected");
+            this.server.startServer(this.controller.getChatBox());
         } else {
-            this.client = new Client(new Socket("localhost", 1234));
+            Scanner scanner = new Scanner(System.in);
+            System.out.println("Enter username: ");
+            this.username = scanner.nextLine();
+            this.client = new Client(new Socket("localhost", 1234), username);
             this.controller.setClient(client);
-            System.out.println("Client connected");
         }
     }
 

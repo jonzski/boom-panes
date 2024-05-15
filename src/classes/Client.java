@@ -11,12 +11,15 @@ public class Client {
     private Socket socket;
     private BufferedReader bufferedReader;
     private BufferedWriter bufferedWriter;
+    private String username;
 
-    public Client(Socket socket) {
+    public Client(Socket socket, String username) {
         try {
             this.socket = socket;
             this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+            this.username = username;
+            sendMessageToServer(username);
         } catch (IOException e) {
             System.out.println("Error creating client");
             e.printStackTrace();
@@ -29,7 +32,6 @@ public class Client {
             bufferedWriter.write(message);
             bufferedWriter.newLine();
             bufferedWriter.flush();
-            System.out.println("Client sent message: " + message);
         } catch (IOException e) {
             System.out.println("Error sending message");
             e.printStackTrace();
@@ -44,7 +46,7 @@ public class Client {
                     String messageFromServer = bufferedReader.readLine();
                     if (messageFromServer != null) {
                         LobbyController.addMessage(messageFromServer, vbox);
-                        System.out.println("Client received message: " + messageFromServer);
+                        System.out.println(username + " received message: " + messageFromServer);
                     }
                 } catch (IOException e) {
                     System.out.println("Error receiving message");
