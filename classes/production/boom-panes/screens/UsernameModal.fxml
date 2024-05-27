@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="320.0" prefWidth="640.0" style="-fx-background-color: rgba(0, 0, 0, 0.5);" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.UsernameModalController">
+   <children>
+      <Label layoutX="133.0" layoutY="76.0" text="Enter Username" textFill="WHITE">
+         <font>
+            <Font name="Montserrat Black" size="40.0" />
+         </font></Label>
+      <TextField fx:id="usernameField" alignment="CENTER" layoutX="205.0" layoutY="147.0" prefHeight="57.0" prefWidth="207.0" promptText="Username" style="-fx-background-color: rgba(255,255,255, 0.25);">
+         <font>
+            <Font name="Montserrat Bold" size="16.0" />
+         </font></TextField>
+      <ImageView fx:id="okButtonView" onMouseEntered="#hoverOKButton" onMouseExited="#notHoverOKButton" onMouseClicked="#handleOk"  fitHeight="150.0" fitWidth="200.0" layoutX="344.0" layoutY="242.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../assets/Buttons/ok.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="cancelButtonView" onMouseEntered="#hoverCancelButton" onMouseExited="#notHoverCancelButton" onMouseClicked="#handleCancel" fitHeight="150.0" fitWidth="200.0" layoutX="81.0" layoutY="242.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../assets/Buttons/cancel.png" />
+         </image>
+      </ImageView>
+   </children>
+</AnchorPane>
