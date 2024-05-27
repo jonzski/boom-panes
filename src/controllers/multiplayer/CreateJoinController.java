@@ -1,14 +1,18 @@
 package controllers.multiplayer;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import scenes.Menu;
 import scenes.multiplayer.CreateRoom;
 import scenes.multiplayer.JoinRoom;
+import controllers.UsernameModalController;
 
 import java.io.IOException;
 
@@ -32,13 +36,19 @@ public class CreateJoinController {
 
 
     public void switchToCreateRoom(MouseEvent event) throws IOException {
-        createRoom = new CreateRoom();
-        ((Stage) ((Node) event.getSource()).getScene().getWindow()).setScene(createRoom.getScene());
+        String username = showUsernameModal();
+        if (username != null) {
+            createRoom = new CreateRoom(username);
+            ((Stage) ((Node) event.getSource()).getScene().getWindow()).setScene(createRoom.getScene());
+        }
     }
 
-    public void switchToJoinRoom(MouseEvent event) throws IOException{
-        joinRoom = new JoinRoom();
-        ((Stage) ((Node) event.getSource()).getScene().getWindow()).setScene(joinRoom.getScene());
+    public void switchToJoinRoom(MouseEvent event) throws IOException {
+        String username = showUsernameModal();
+        if (username != null) {
+            joinRoom = new JoinRoom(username);
+            ((Stage) ((Node) event.getSource()).getScene().getWindow()).setScene(joinRoom.getScene());
+        }
     }
 
     public void switchToMenu(MouseEvent event) throws IOException{
@@ -60,6 +70,29 @@ public class CreateJoinController {
 
     public void notHoverJoinRoom(MouseEvent event) {
         joinRoomButtonView.setImage(joinRoomButton);
+    }
+
+    private String showUsernameModal() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("../../screens/UsernameModal.fxml"));
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("Enter Username");
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.initOwner(createRoomButtonView.getScene().getWindow());
+            dialogStage.setScene(new Scene(loader.load()));
+
+            UsernameModalController controller = loader.getController();
+            controller.setDialogStage(dialogStage);
+
+            dialogStage.showAndWait();
+
+            if (controller.isOkClicked()) {
+                return controller.getUsername();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }

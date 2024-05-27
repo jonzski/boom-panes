@@ -16,7 +16,7 @@ public class CreateJoin {
     private final static int WINDOW_HEIGHT = 720;
 
     public CreateJoin() throws IOException {
-        this.root = FXMLLoader.load(getClass().getResource("../../screens/multiplayer/CreateJoin.fxml"));
+        this.root = FXMLLoader.load(getClass().getResource("../screens/CreateJoin.fxml"));
         this.scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
     }
 
