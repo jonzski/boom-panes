@@ -21,21 +21,8 @@ public class About {
         this.scene = new Scene(root, About.WINDOW_WIDTH, About.WINDOW_HEIGHT);
     }
 
-    public void setAbout(Stage stage) {
-        this.stage = stage;
-        this.stage.setResizable(false);
-        this.stage.setTitle("Boom Panes");
-        this.stage.setScene(this.scene);
-        this.stage.centerOnScreen();
-        this.stage.show();
-    }
-
     public Scene getScene() {
         return this.scene;
-    }
-
-    public Stage getStage() {
-        return this.stage;
     }
 
 }
