@@ -20,7 +20,11 @@
             <Image url="@../../assets/single label.png" />
          </image>
       </ImageView>
+<<<<<<< HEAD:src/screens/singleplayer/SingleLobby.fxml
       <ImageView fitHeight="40.0" fitWidth="138.0" layoutX="35.0" layoutY="647.0" pickOnBounds="true" preserveRatio="true" onMouseClicked="#switchToMenu">
+=======
+      <ImageView fitHeight="40.0" fitWidth="138.0" layoutX="35.0" layoutY="647.0" onMouseReleased="#switchToMenu" pickOnBounds="true" preserveRatio="true">
+>>>>>>> 6375fa513ed129ced862f6234d31d0508f811e4d:src/screens/SinglePlayer.fxml
          <image>
             <Image url="@../../assets/Buttons/back.png" />
          </image>
@@ -40,27 +44,27 @@
             <Image url="@../../assets/Buttons/backbutton.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="60.0" fitWidth="53.0" layoutX="849.0" layoutY="226.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="60.0" fitWidth="53.0" layoutX="851.0" layoutY="229.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../assets/Buttons/nextbutton.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="81.0" fitWidth="50.0" layoutX="332.0" layoutY="309.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="81.0" fitWidth="50.0" layoutX="332.0" layoutY="306.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../assets/Buttons/backbutton.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="60.0" fitWidth="53.0" layoutX="848.0" layoutY="301.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="60.0" fitWidth="53.0" layoutX="851.0" layoutY="303.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../assets/Buttons/nextbutton.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="81.0" fitWidth="50.0" layoutX="332.0" layoutY="387.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="81.0" fitWidth="50.0" layoutX="331.0" layoutY="386.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../assets/Buttons/backbutton.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="60.0" fitWidth="53.0" layoutX="848.0" layoutY="383.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="60.0" fitWidth="53.0" layoutX="852.0" layoutY="382.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../assets/Buttons/nextbutton.png" />
          </image>
@@ -70,17 +74,17 @@
             <Image url="@../../assets/Buttons/backbutton.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="60.0" fitWidth="53.0" layoutX="849.0" layoutY="461.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="60.0" fitWidth="53.0" layoutX="851.0" layoutY="464.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../assets/Buttons/nextbutton.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="81.0" fitWidth="50.0" layoutX="332.0" layoutY="545.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="81.0" fitWidth="50.0" layoutX="332.0" layoutY="547.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../assets/Buttons/backbutton.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="60.0" fitWidth="53.0" layoutX="849.0" layoutY="547.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="60.0" fitWidth="53.0" layoutX="852.0" layoutY="540.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../assets/Buttons/nextbutton.png" />
          </image>
