@@ -1,6 +1,6 @@
 package classes;
 
-import controllers.LobbyController;
+import controllers.multiplayer.LobbyController;
 import javafx.scene.layout.VBox;
 
 import java.io.*;
@@ -31,9 +31,8 @@ public class Server {
                     this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 
                     String clientUsername = bufferedReader.readLine();
-                    System.out.println("Client connected with username: " + clientUsername);
 
-                    ClientHandler clientHandler = new ClientHandler(socket, clientUsername);
+                    ClientHandler clientHandler = new ClientHandler(socket, clientUsername, this);
                     Thread thread = new Thread(clientHandler);
                     thread.start();
 
@@ -60,22 +59,25 @@ public class Server {
 
     public void receiveMessageFromClient(VBox vbox) {
         new Thread(() -> {
-            try {
-                while (true) {
-                    if (socket != null && socket.isConnected()) {
-                        String messageFromClient = bufferedReader.readLine();
+            while (socket.isConnected()) {
+                try {
+                    String messageFromClient = bufferedReader.readLine();
+                    if (messageFromClient != null) {
                         LobbyController.addMessage(messageFromClient, vbox);
                         System.out.println(username + " received message: " + messageFromClient);
-                    } else {
-                        break;
                     }
+                } catch (IOException e) {
+                    System.out.println("Error receiving message");
+                    e.printStackTrace();
+                    closeEverything(socket, bufferedReader, bufferedWriter);
+                    break;
                 }
-            } catch (IOException e) {
-                System.out.println("Error receiving message");
-                closeEverything(socket, bufferedReader, bufferedWriter);
-                e.printStackTrace();
             }
         }).start();
+    }
+
+    public void handleBroadcastFromClient(String message) {
+        System.out.println("Message from client: " + message);
     }
 
     public void closeEverything(Socket socket, BufferedReader bufferedReader, BufferedWriter bufferedWriter) {

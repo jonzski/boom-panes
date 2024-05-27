@@ -1,10 +1,11 @@
-package scenes;
+package scenes.multiplayer;
 import classes.Client;
 import classes.Server;
-import controllers.LobbyController;
+import controllers.multiplayer.LobbyController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -20,11 +21,14 @@ public class Lobby {
     private Client client;
     private String username;
 
+    private final static int WINDOW_WIDTH = 1280;
+    private final static int WINDOW_HEIGHT = 720;
+
     public Lobby(boolean isServer) throws IOException {
         System.out.println("Lobby created");
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("../screens/Lobby.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("../../screens/multiplayer/Lobby.fxml"));
         this.root = loader.load();
-        this.scene = new Scene(root, Menu.WINDOW_WIDTH, Menu.WINDOW_HEIGHT);
+        this.scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
         this.controller = loader.getController();
         this.controller.setIsServer(isServer);
 

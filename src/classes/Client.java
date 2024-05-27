@@ -1,6 +1,6 @@
 package classes;
 
-import controllers.LobbyController;
+import controllers.multiplayer.LobbyController;
 import javafx.scene.layout.VBox;
 
 import java.io.*;
@@ -32,6 +32,7 @@ public class Client {
             bufferedWriter.write(message);
             bufferedWriter.newLine();
             bufferedWriter.flush();
+            System.out.println(username + " sent : " + message);
         } catch (IOException e) {
             System.out.println("Error sending message");
             e.printStackTrace();

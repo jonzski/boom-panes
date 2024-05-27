@@ -1,4 +1,4 @@
-package controllers;
+package controllers.multiplayer;
 
 import classes.Client;
 import classes.Server;
@@ -83,13 +83,13 @@ public class LobbyController implements Initializable {
 
             if (isServer) {
                 if (server != null) {
-                    server.sendMessageToClient(message);
+                    new Thread(() -> server.sendMessageToClient(message)).start();
                 } else {
                     System.out.println("Server is null on send message");
                 }
             } else {
                 if (client != null) {
-                    client.sendMessageToServer(message);
+                    new Thread(() -> client.sendMessageToServer(message)).start();
                 } else {
                     System.out.println("Client is null on send message");
                 }

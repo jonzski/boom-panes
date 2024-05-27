@@ -1,4 +1,4 @@
-package scenes;
+package scenes.singleplayer;
 
 import classes.Bomb;
 import classes.Bot;
@@ -14,12 +14,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.Scanner;
 
-public class SingleRoom extends AnimationTimer {
+public class Room extends AnimationTimer {
 
     private GraphicsContext gc;
     private Scene scene;
@@ -51,12 +49,12 @@ public class SingleRoom extends AnimationTimer {
     private Image background = new Image("assets/Backgrounds/battleroom-bg.png");
     private String playerAnswer;
 
-    public SingleRoom() throws IOException {
-        this.canvas = new Canvas(SingleRoom.WINDOW_WIDTH, SingleRoom.WINDOW_HEIGHT);
+    public Room() throws IOException {
+        this.canvas = new Canvas(Room.WINDOW_WIDTH, Room.WINDOW_HEIGHT);
         this.gc = this.canvas.getGraphicsContext2D();
         this.root = new Group();
         this.answerField = new TextField();
-        this.scene = new Scene(root, SingleRoom.WINDOW_WIDTH, SingleRoom.WINDOW_HEIGHT);
+        this.scene = new Scene(root, Room.WINDOW_WIDTH, Room.WINDOW_HEIGHT);
         this.root.getChildren().add(this.canvas);
         this.root.getChildren().add(this.answerField);
         this.timer = new GameTimer();

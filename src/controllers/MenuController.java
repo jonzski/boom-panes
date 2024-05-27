@@ -7,12 +7,14 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import scenes.*;
+import scenes.multiplayer.CreateJoin;
+import scenes.singleplayer.Lobby;
 
 import java.io.IOException;
 
 public class MenuController {
 
-    private SingleLobby singleLobby;
+    private Lobby lobby;
     private CreateJoin createJoin;
     private About aboutPage;
 
@@ -43,8 +45,8 @@ public class MenuController {
 
 
     public void switchToLobbySingle(MouseEvent event) throws IOException {
-        singleLobby = new SingleLobby();
-        ((Stage) ((Node) event.getSource()).getScene().getWindow()).setScene(singleLobby.getScene());
+        lobby = new Lobby();
+        ((Stage) ((Node) event.getSource()).getScene().getWindow()).setScene(lobby.getScene());
     }
 
     public void switchToCreateJoin(MouseEvent event) throws IOException {

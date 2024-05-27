@@ -1,20 +1,20 @@
-package controllers;
+package controllers.singleplayer;
 
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import scenes.Menu;
-import scenes.SingleRoom;
+import scenes.singleplayer.Room;
 
 import java.io.IOException;
 
 public class SingleLobbyController {
 
     Menu menu;
-    SingleRoom singleGame;
+    Room singleGame;
 
     public void switchToSingleGame(MouseEvent event) throws IOException {
-        singleGame = new SingleRoom();
+        singleGame = new Room();
         ((Stage) ((Node) event.getSource()).getScene().getWindow()).setScene(singleGame.getScene());
         singleGame.start();
     }
