@@ -7,6 +7,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import scenes.Menu;
+import scenes.SingleGame;
 import scenes.singleplayer.Room;
 
 import java.io.IOException;
@@ -36,6 +37,7 @@ public class SingleLobbyController {
     public AnchorPane singleRoot;
     Menu menu;
     Room singleGame;
+    SingleGame singleUI;
 
 
     // menu values

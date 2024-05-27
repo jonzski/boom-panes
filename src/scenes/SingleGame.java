@@ -17,7 +17,7 @@ public class SingleGame {
     private int numPlayers;
 
     public SingleGame() throws IOException {
-        this.root = FXMLLoader.load(getClass().getResource("../screens/SingleGame.fxml"));
+        this.root = FXMLLoader.load(getClass().getResource("../screens/singleplayer/SingleGame.fxml"));
         this.scene = new Scene(root, Menu.WINDOW_WIDTH, Menu.WINDOW_HEIGHT);
     }
 
