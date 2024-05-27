@@ -37,5 +37,4 @@ public class About {
     public Stage getStage() {
         return this.stage;
     }
-
 }

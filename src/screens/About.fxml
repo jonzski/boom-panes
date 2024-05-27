@@ -4,12 +4,31 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="screens.About">
    <children>
       <ImageView fitHeight="400.0" fitWidth="710.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../assets/Backgrounds/pxsprite-space.gif" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="131.0" fitWidth="436.0" layoutX="137.0" layoutY="59.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../assets/about.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="98.0" fitWidth="102.0" layoutX="586.0" layoutY="26.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../assets/c.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="321.0" fitWidth="550.0" layoutX="80.0" layoutY="118.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../assets/about%20details.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="21.0" fitWidth="78.0" layoutX="38.0" layoutY="351.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../assets/Buttons/back.png" />
          </image>
       </ImageView>
    </children>
