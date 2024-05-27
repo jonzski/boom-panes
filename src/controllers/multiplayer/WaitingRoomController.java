@@ -11,6 +11,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -22,6 +23,7 @@ import java.util.ResourceBundle;
 
 public class WaitingRoomController implements Initializable {
 
+    public GridPane playersContainer;
     @FXML
     private Button buttonSend;
 
@@ -118,6 +120,8 @@ public class WaitingRoomController implements Initializable {
 
     public void setServer(Server server) {
         this.server = server;
+
+        Platform.runLater(()->playersContainer.getChildren().add(new Button()));
         if (server != null) {
             server.receiveMessageFromClient(chatBox);
         }
@@ -125,6 +129,8 @@ public class WaitingRoomController implements Initializable {
 
     public void setClient(Client client) {
         this.client = client;
+        Platform.runLater(()->playersContainer.getChildren().add(new TextField()));
+
         if (client != null) {
             client.receiveMessageFromServer(chatBox);
         }
