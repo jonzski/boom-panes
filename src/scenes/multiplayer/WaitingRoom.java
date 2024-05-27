@@ -22,7 +22,7 @@ public class WaitingRoom {
     private final static int WINDOW_WIDTH = 1280;
     private final static int WINDOW_HEIGHT = 720;
 
-    public WaitingRoom(boolean isServer, String username) throws IOException {
+    public WaitingRoom(boolean isServer, String username, int playerCount, int difficulty, int duration, int lives) throws IOException {
         System.out.println("Lobby created");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("../../screens/multiplayer/WaitingRoom.fxml"));
         this.root = loader.load();

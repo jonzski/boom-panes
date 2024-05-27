@@ -7,7 +7,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import scenes.Menu;
-import scenes.SingleRoom;
+import scenes.singleplayer.Room;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -35,8 +35,7 @@ public class SingleLobbyController {
     public ImageView playerPrev;
     public AnchorPane singleRoot;
     Menu menu;
-    SingleRoom singleGame;
-
+    Room singleGame;
 
 
     // menu values
@@ -59,8 +58,6 @@ public class SingleLobbyController {
     int durationIndex = 0;
     int livesIndex = 0;
 
-
-
     // onClick functions
     public void switchToSingleGame(MouseEvent event) throws IOException {
         System.out.println("Switching to Single Game");
@@ -69,7 +66,7 @@ public class SingleLobbyController {
         System.out.println("Difficulty: " + difficulty.get(difficultyIndex));
         System.out.println("Duration: " + duration.get(durationIndex));
         System.out.println("No. of lives: " + lives.get(livesIndex));
-        singleGame = new SingleRoom(pCount.get(pCountIndex), difficultyIndex+1, duration.get(durationIndex), lives.get(livesIndex));
+        singleGame = new Room(pCount.get(pCountIndex), difficultyIndex+1, duration.get(durationIndex), lives.get(livesIndex));
         ((Stage) ((Node) event.getSource()).getScene().getWindow()).setScene(singleGame.getScene());
         singleGame.start();
     }

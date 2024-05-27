@@ -15,7 +15,7 @@ public class JoinRoomController {
     String username;
 
     public void switchToLobby(MouseEvent event) throws IOException {
-        waitingRoom = new WaitingRoom(false, username);
+        waitingRoom = new WaitingRoom(false, username, 0, 0, 0, 0);
         ((Stage) ((Node) event.getSource()).getScene().getWindow()).setScene(waitingRoom.getScene());
     }
 
