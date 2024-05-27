@@ -27,14 +27,14 @@ public class SingleRoom extends AnimationTimer {
     private Canvas canvas;
     private TextField answerField;
 
-    private final int difficulty = 1;
-    private final int health = 3;
-    private final int duration = 10;
-    private final int numBots = 3;
-    private final int botsThinkingTime = 3;
+    private int difficulty;
+    private int health;
+    private int duration;
+    private int numBots;
+    private double botsThinkingTime;
 
     private int currentPlayerIndex = 0;
-    private int playerIndex = 0;
+    private final int playerIndex = 0;
 
     private Player player;
     private Bomb bomb;
@@ -43,15 +43,15 @@ public class SingleRoom extends AnimationTimer {
     private final static int WINDOW_HEIGHT = 720;
     private boolean isRunning = true;
 
-    private GameTimer timer;
-    private GameTimer waitTimer;
+    private final GameTimer timer;
+    private final GameTimer waitTimer;
 
-    private ArrayList<Player> players = new ArrayList<>();
+    private final ArrayList<Player> players = new ArrayList<>();
     private ArrayList<Bot> bots;
-    private Image background = new Image("assets/Backgrounds/battleroom-bg.png");
+    private final Image background = new Image("assets/Backgrounds/battleroom-bg.png");
     private String playerAnswer;
 
-    public SingleRoom() throws IOException {
+    public SingleRoom(int playerCount, int difficulty, int duration, int health) throws IOException {
         this.canvas = new Canvas(SingleRoom.WINDOW_WIDTH, SingleRoom.WINDOW_HEIGHT);
         this.gc = this.canvas.getGraphicsContext2D();
         this.root = new Group();
@@ -61,6 +61,13 @@ public class SingleRoom extends AnimationTimer {
         this.root.getChildren().add(this.answerField);
         this.timer = new GameTimer();
         this.waitTimer = new GameTimer();
+
+        // get parameters
+        this.numBots = playerCount-1;
+        this.duration = duration;
+        this.health = health;
+        this.difficulty = difficulty;
+        this.botsThinkingTime = ((double) duration /3) - .1;
 
         this.initializeBots();
         this.initializePlayer();

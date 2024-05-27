@@ -7,7 +7,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.SingleLobbyController">
+<AnchorPane fx:id="singleRoot" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.SingleLobbyController">
    <children>
       <ImageView fitHeight="720.0" fitWidth="1280.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -20,72 +20,72 @@
             <Image url="@../assets/single label.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="40.0" fitWidth="138.0" layoutX="35.0" layoutY="647.0" pickOnBounds="true" preserveRatio="true" onMouseClicked="#switchToMenu">
+      <ImageView fitHeight="40.0" fitWidth="138.0" layoutX="35.0" layoutY="647.0" onMouseClicked="#switchToMenu" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../assets/Buttons/back.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="43.0" fitWidth="187.0" layoutX="1070.0" layoutY="646.0" pickOnBounds="true" preserveRatio="true" onMouseClicked="#switchToSingleGame">
+      <ImageView fitHeight="43.0" fitWidth="187.0" layoutX="1070.0" layoutY="646.0" onMouseClicked="#switchToSingleGame" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../assets/Buttons/start.png" />
          </image>
       </ImageView>
-      <Label layoutX="408.0" layoutY="652.0" text="Please select number of players." textFill="WHITE">
+      <Label layoutX="459.0" layoutY="649.0" text="Finalize the room settings." textFill="WHITE">
          <font>
             <Font name="Montserrat ExtraBold" size="25.0" />
          </font>
       </Label>
-      <ImageView fitHeight="81.0" fitWidth="50.0" layoutX="332.0" layoutY="231.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="playerPrev" fitHeight="81.0" fitWidth="50.0" layoutX="332.0" layoutY="231.0" onMouseClicked="#playerDecrement" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../assets/Buttons/backbutton.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="60.0" fitWidth="53.0" layoutX="849.0" layoutY="226.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="playerNext" fitHeight="60.0" fitWidth="53.0" layoutX="849.0" layoutY="226.0" onMouseClicked="#playerIncrement" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../assets/Buttons/nextbutton.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="81.0" fitWidth="50.0" layoutX="332.0" layoutY="309.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="setPrev" fitHeight="81.0" fitWidth="50.0" layoutX="332.0" layoutY="309.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../assets/Buttons/backbutton.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="60.0" fitWidth="53.0" layoutX="848.0" layoutY="301.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="setNext" fitHeight="60.0" fitWidth="53.0" layoutX="848.0" layoutY="301.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../assets/Buttons/nextbutton.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="81.0" fitWidth="50.0" layoutX="332.0" layoutY="387.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="difficultyPrev" fitHeight="81.0" fitWidth="50.0" layoutX="332.0" layoutY="387.0" onMouseClicked="#difficultyDecrement" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../assets/Buttons/backbutton.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="60.0" fitWidth="53.0" layoutX="848.0" layoutY="383.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="difficultyNext" fitHeight="60.0" fitWidth="53.0" layoutX="848.0" layoutY="383.0" onMouseClicked="#difficultyIncrement" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../assets/Buttons/nextbutton.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="81.0" fitWidth="50.0" layoutX="331.0" layoutY="468.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="durationPrev" fitHeight="81.0" fitWidth="50.0" layoutX="331.0" layoutY="468.0" onMouseClicked="#durationDecrement" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../assets/Buttons/backbutton.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="60.0" fitWidth="53.0" layoutX="849.0" layoutY="461.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="durationNext" fitHeight="60.0" fitWidth="53.0" layoutX="849.0" layoutY="461.0" onMouseClicked="#durationIncrement" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../assets/Buttons/nextbutton.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="81.0" fitWidth="50.0" layoutX="332.0" layoutY="545.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="livesPrev" fitHeight="81.0" fitWidth="50.0" layoutX="332.0" layoutY="545.0" onMouseClicked="#livesDecrement" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../assets/Buttons/backbutton.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="60.0" fitWidth="53.0" layoutX="849.0" layoutY="547.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="livesNext" fitHeight="60.0" fitWidth="53.0" layoutX="849.0" layoutY="547.0" onMouseClicked="#livesIncrement" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../assets/Buttons/nextbutton.png" />
          </image>
       </ImageView>
-      <Label layoutX="517.0" layoutY="305.0" prefHeight="48.0" prefWidth="17.0" text="1" textFill="WHITE">
+      <Label fx:id="setCount" layoutX="517.0" layoutY="305.0" prefHeight="48.0" prefWidth="17.0" text="1" textFill="WHITE">
          <font>
             <Font name="Montserrat ExtraBold" size="45.0" />
          </font>
@@ -95,7 +95,7 @@
             <Font name="Montserrat ExtraBold" size="45.0" />
          </font>
       </Label>
-      <Label layoutX="474.0" layoutY="231.0" prefHeight="56.0" prefWidth="1.0" text="1" textFill="WHITE">
+      <Label fx:id="playerCount" layoutX="483.0" layoutY="230.0" prefHeight="66.0" prefWidth="34.0" text="2" textFill="WHITE">
          <font>
             <Font name="Montserrat ExtraBold" size="45.0" />
          </font>
@@ -105,17 +105,17 @@
             <Font name="Montserrat ExtraBold" size="45.0" />
          </font>
       </Label>
-      <Label layoutX="549.0" layoutY="382.0" prefHeight="56.0" prefWidth="143.0" text="EASY" textFill="WHITE">
+      <Label fx:id="difficultyLevel" layoutX="534.0" layoutY="379.0" prefHeight="66.0" prefWidth="213.0" text="EASY" textFill="WHITE">
          <font>
             <Font name="Montserrat ExtraBold" size="45.0" />
          </font>
       </Label>
-      <Label layoutX="459.0" layoutY="463.0" prefHeight="56.0" prefWidth="317.0" text="DURATION: 5" textFill="WHITE">
+      <Label fx:id="durationCount" layoutX="459.0" layoutY="463.0" prefHeight="66.0" prefWidth="340.0" text="DURATION: 5" textFill="WHITE">
          <font>
             <Font name="Montserrat ExtraBold" size="45.0" />
          </font>
       </Label>
-      <Label layoutX="524.0" layoutY="544.0" prefHeight="56.0" prefWidth="199.0" text="LIVES: 3" textFill="WHITE">
+      <Label fx:id="livesCount" layoutX="524.0" layoutY="544.0" prefHeight="66.0" prefWidth="224.0" text="LIVES: 1" textFill="WHITE">
          <font>
             <Font name="Montserrat ExtraBold" size="45.0" />
          </font>

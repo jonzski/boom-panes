@@ -2,9 +2,11 @@ package controllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import scenes.*;
 
@@ -12,6 +14,7 @@ import java.io.IOException;
 
 public class MenuController {
 
+    public HBox hbIndex1;
     private SingleLobby singleLobby;
     private CreateJoin createJoin;
     private About aboutPage;
@@ -97,5 +100,4 @@ public class MenuController {
     public void boomClickFunc (MouseEvent event) {
         boom.setImage(boomClick);
     }
-
 }
