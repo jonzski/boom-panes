@@ -1,5 +1,5 @@
 package scenes.multiplayer;
 
-public class Room {
+public class GameRoom {
 
 }

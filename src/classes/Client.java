@@ -1,6 +1,6 @@
 package classes;
 
-import controllers.multiplayer.LobbyController;
+import controllers.multiplayer.WaitingRoomController;
 import javafx.scene.layout.VBox;
 
 import java.io.*;
@@ -46,7 +46,7 @@ public class Client {
                 try {
                     String messageFromServer = bufferedReader.readLine();
                     if (messageFromServer != null) {
-                        LobbyController.addMessage(messageFromServer, vbox);
+                        WaitingRoomController.addMessage(messageFromServer, vbox);
                         System.out.println(username + " received message: " + messageFromServer);
                     }
                 } catch (IOException e) {

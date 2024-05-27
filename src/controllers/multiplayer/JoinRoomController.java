@@ -4,19 +4,19 @@ import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import scenes.multiplayer.CreateJoin;
-import scenes.multiplayer.Lobby;
+import scenes.multiplayer.WaitingRoom;
 
 import java.io.IOException;
 
 public class JoinRoomController {
 
-    Lobby lobby;
+    WaitingRoom waitingRoom;
     CreateJoin createJoin;
     String username;
 
     public void switchToLobby(MouseEvent event) throws IOException {
-        lobby = new Lobby(false, username);
-        ((Stage) ((Node) event.getSource()).getScene().getWindow()).setScene(lobby.getScene());
+        waitingRoom = new WaitingRoom(false, username);
+        ((Stage) ((Node) event.getSource()).getScene().getWindow()).setScene(waitingRoom.getScene());
     }
 
     public void switchToCreateJoin(MouseEvent event) throws IOException {

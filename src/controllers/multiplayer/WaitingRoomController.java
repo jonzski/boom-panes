@@ -20,7 +20,7 @@ import javafx.scene.text.TextFlow;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class LobbyController implements Initializable {
+public class WaitingRoomController implements Initializable {
 
     @FXML
     private Button buttonSend;

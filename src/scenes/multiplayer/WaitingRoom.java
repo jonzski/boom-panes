@@ -1,7 +1,7 @@
 package scenes.multiplayer;
 import classes.Client;
 import classes.Server;
-import controllers.multiplayer.LobbyController;
+import controllers.multiplayer.WaitingRoomController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -9,13 +9,12 @@ import javafx.scene.Scene;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Scanner;
 
-public class Lobby {
+public class WaitingRoom {
 
     private Parent root;
     private Scene scene;
-    private LobbyController controller;
+    private WaitingRoomController controller;
 
     private Server server;
     private Client client;
@@ -23,9 +22,9 @@ public class Lobby {
     private final static int WINDOW_WIDTH = 1280;
     private final static int WINDOW_HEIGHT = 720;
 
-    public Lobby(boolean isServer, String username) throws IOException {
+    public WaitingRoom(boolean isServer, String username) throws IOException {
         System.out.println("Lobby created");
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("../../screens/multiplayer/Lobby.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("../../screens/multiplayer/WaitingRoom.fxml"));
         this.root = loader.load();
         this.scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
         this.controller = loader.getController();
