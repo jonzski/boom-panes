@@ -28,6 +28,8 @@ public class Server {
                 while (!serverSocket.isClosed()) {
                     this.socket = serverSocket.accept();
                     this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                    PrintWriter outputToClient = new PrintWriter(socket.getOutputStream(), true);
+
                     this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 
                     String clientUsername = bufferedReader.readLine();

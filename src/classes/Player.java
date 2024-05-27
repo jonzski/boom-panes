@@ -11,6 +11,7 @@ import java.util.ArrayList;
 public class Player extends Sprite {
 
     private int health;
+    private Perk perk;
     public String name;
     private Boolean isDead;
     private final static Image HEAD = new Image("assets/player-head.png");
@@ -71,13 +72,17 @@ public class Player extends Sprite {
     }
 
     public int answer(Bomb bomb, String answer) {
-        System.out.println("Player " + name + " answered: " + answer);
+//        System.out.println("Player " + name + " answered: " + answer);
         if (bomb.checkAnswer(answer)) {
-            System.out.println("Correct answer");
+//            System.out.println("Correct answer");
             return 1;
         } else {
-            System.out.println("Incorrect answer, try again");
+//            System.out.println("Incorrect answer, try again");
             return -1;
         }
     }
+
+    public Perk getPerk(){ return this.perk;}
+
+    public void setPerk(Perk perk) {this.perk = perk;}
 }
