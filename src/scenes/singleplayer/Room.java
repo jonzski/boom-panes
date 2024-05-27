@@ -25,14 +25,14 @@ public class Room extends AnimationTimer {
     private Canvas canvas;
     private TextField answerField;
 
-    private final int difficulty = 1;
-    private final int health = 3;
-    private final int duration = 10;
-    private final int numBots = 3;
-    private final int botsThinkingTime = 3;
+    private int difficulty;
+    private int health;
+    private int duration;
+    private int numBots;
+    private double botsThinkingTime;
 
     private int currentPlayerIndex = 0;
-    private int playerIndex = 0;
+    private final int playerIndex = 0;
 
     private Player player;
     private Bomb bomb;
@@ -41,16 +41,17 @@ public class Room extends AnimationTimer {
     private final static int WINDOW_HEIGHT = 720;
     private boolean isRunning = true;
 
-    private GameTimer timer;
-    private GameTimer waitTimer;
+    private final GameTimer timer;
+    private final GameTimer waitTimer;
 
-    private ArrayList<Player> players = new ArrayList<>();
+    private final ArrayList<Player> players = new ArrayList<>();
     private ArrayList<Bot> bots;
-    private Image background = new Image("assets/Backgrounds/battleroom-bg.png");
+    private final Image background = new Image("assets/Backgrounds/battleroom-bg.png");
     private String playerAnswer;
 
-    public Room() throws IOException {
+    public Room(int playerCount, int difficulty, int duration, int health) throws IOException {
         this.canvas = new Canvas(Room.WINDOW_WIDTH, Room.WINDOW_HEIGHT);
+        this.canvas = new Canvas(SingleRoom.WINDOW_WIDTH, SingleRoom.WINDOW_HEIGHT);
         this.gc = this.canvas.getGraphicsContext2D();
         this.root = new Group();
         this.answerField = new TextField();
@@ -59,6 +60,13 @@ public class Room extends AnimationTimer {
         this.root.getChildren().add(this.answerField);
         this.timer = new GameTimer();
         this.waitTimer = new GameTimer();
+
+        // get parameters
+        this.numBots = playerCount-1;
+        this.duration = duration;
+        this.health = health;
+        this.difficulty = difficulty;
+        this.botsThinkingTime = ((double) duration /3) - .1;
 
         this.initializeBots();
         this.initializePlayer();
@@ -74,17 +82,14 @@ public class Room extends AnimationTimer {
     }
 
     private void initializePlayer() {
-        this.player = new Player("Player");
-        this.player.setHealth(this.health);
-        this.player.setStatus(false);
+        this.player = new Player(this.health, "Player", false);
     }
 
     public void initializeBots() {
         this.bots = new ArrayList<>();
         for (int i = 0; i < this.numBots; i++) {
-            this.bots.add(new Bot("Bot " + i, this.difficulty));
-            this.bots.get(i).setHealth(this.health);
-            this.bots.get(i).setStatus(false);
+            int scaling = (int) ((double) i / (this.numBots - 1) * 4); // calculate scaling value
+            this.bots.add(new Bot(this.health, "Bot " + i, false, this.difficulty));
         }
     }
 
@@ -183,7 +188,7 @@ public class Room extends AnimationTimer {
             players.get(currentPlayerIndex).reducePlayerHealth();
             if (players.get(currentPlayerIndex).isDead()) {
                 System.out.println(players.get(currentPlayerIndex).getName() + " is dead!");
-//                players.get(currentPlayerIndex).setImageDead();
+                players.get(currentPlayerIndex).setImageDead();
                 players.remove(players.get(currentPlayerIndex));
                 if (players.size() == 1) endGame();
             }
