@@ -9,6 +9,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import scenes.Menu;
 import scenes.multiplayer.CreateRoom;
 import scenes.multiplayer.JoinRoom;
@@ -79,6 +80,7 @@ public class CreateJoinController {
             dialogStage.setTitle("Enter Username");
             dialogStage.initModality(Modality.WINDOW_MODAL);
             dialogStage.initOwner(createRoomButtonView.getScene().getWindow());
+            dialogStage.initStyle(StageStyle.UNDECORATED);
             dialogStage.setScene(new Scene(loader.load()));
 
             UsernameModalController controller = loader.getController();
