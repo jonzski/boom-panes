@@ -13,9 +13,9 @@ public class GameServer {
     public GameServer(int port) {
         this.port = port;
     }
-
+    
     public void startServer() {
-        System.out.println("Server started on port " + port);
+        System.out.println("Game Server started on port " + port);
         new Thread(() -> {
             try {
                 while (!serverSocket.isClosed()) {

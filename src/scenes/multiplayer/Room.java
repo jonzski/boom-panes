@@ -27,7 +27,6 @@ public class Room extends AnimationTimer {
 
     private int health;
     private int duration;
-
     private int currentPlayerIndex = 0;
 
     private Player player;

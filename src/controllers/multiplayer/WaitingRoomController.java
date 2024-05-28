@@ -49,9 +49,9 @@ public class WaitingRoomController implements Initializable {
 
     private Room room;
 
-    private boolean isServer;
-    private ChatServer chatServer;
-    private ChatClient chatClient;
+    private static boolean isServer;
+    private static ChatServer chatServer;
+    private static ChatClient chatClient;
     private String username;
     private int playerCount;
     private int duration;
@@ -86,7 +86,7 @@ public class WaitingRoomController implements Initializable {
             hBox.getChildren().add(textFlow);
             chatBox.getChildren().add(hBox);
             if (isServer) {
-                new Thread(() -> chatServer.broadcastMessage(message)).start();
+                new Thread(() -> chatServer.broadcastMessage(message, isServer)).start();
             } else {
                 new Thread(() -> chatClient.sendMessageToChat(message)).start();
             }

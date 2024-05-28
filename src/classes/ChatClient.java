@@ -21,7 +21,7 @@ public class ChatClient {
     }
 
     public void sendMessageToChat(String message) {
-        out.println(message);
+        out.println(username + ": " + message);
     }
 
     public void listenForMessages(VBox chatBox) {
@@ -32,7 +32,9 @@ public class ChatClient {
                 out = new PrintWriter(socket.getOutputStream(), true);
                 String message;
                 while ((message = in.readLine()) != null) {
-                    WaitingRoomController.addMessage(message, chatBox);
+                    if (!message.startsWith(username + ": ")) {
+                        WaitingRoomController.addMessage(message, chatBox);
+                    }
                 }
             } catch (IOException e) {
                 e.printStackTrace();

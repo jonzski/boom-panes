@@ -39,9 +39,12 @@ public class ChatServer {
         }).start();
     }
 
-    public void broadcastMessage(String message) {
+    public void broadcastMessage(String message, boolean isFromServer) {
         for (ClientHandler client : clients) {
             client.sendMessage(message);
+        }
+        if (!isFromServer) {
+            WaitingRoomController.addMessage(message, chatBox);
         }
     }
 
@@ -49,7 +52,6 @@ public class ChatServer {
         private Socket socket;
         private PrintWriter out;
         private ChatServer chatServer;
-
 
         public ClientHandler(Socket socket, ChatServer chatServer) {
             this.socket = socket;
@@ -63,7 +65,7 @@ public class ChatServer {
                 out = new PrintWriter(socket.getOutputStream(), true);
                 String message;
                 while ((message = in.readLine()) != null) {
-                    chatServer.broadcastMessage(message);
+                    chatServer.broadcastMessage(message, false);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -73,7 +75,6 @@ public class ChatServer {
 
         public void sendMessage(String message) {
             out.println(message);
-            WaitingRoomController.addMessage(message, chatBox);
         }
 
         public void close() {
