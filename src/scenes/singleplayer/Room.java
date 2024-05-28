@@ -1,7 +1,11 @@
 package scenes.singleplayer;
 
-import classes.*;
+import classes.Bomb;
+import classes.Bot;
+import classes.GameTimer;
+import classes.Player;
 import javafx.animation.AnimationTimer;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -9,6 +13,8 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.AnchorPane;
+import scenes.Menu;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -45,10 +51,11 @@ public class Room extends AnimationTimer {
 
     private final ArrayList<Player> players = new ArrayList<>();
     private ArrayList<Bot> bots;
-    private final Image background = new Image("assets/Backgrounds/battleroom-bg.png");
+    private final Image background = new Image("assets/Backgrounds/pxsprite-space.gif");
     private String playerAnswer;
 
     public Room(int playerCount, int difficulty, int duration, int health) throws IOException {
+
         this.canvas = new Canvas(Room.WINDOW_WIDTH, Room.WINDOW_HEIGHT);
         this.canvas = new Canvas(Room.WINDOW_WIDTH, Room.WINDOW_HEIGHT);
         this.gc = this.canvas.getGraphicsContext2D();
@@ -74,6 +81,8 @@ public class Room extends AnimationTimer {
 
         this.initializeLobbyPlayers();
     }
+
+
 
     private void initializeLobbyPlayers(){
         this.players.add(this.player);
