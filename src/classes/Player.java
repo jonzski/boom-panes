@@ -14,7 +14,7 @@ public class Player extends Sprite {
     private Perk perk;
     public String name;
     private Boolean isDead;
-    private final static Image HEAD = new Image("assets/player-head.png");
+    private final static Image HEAD = new Image("assets/player.png");
     private ArrayList<Health> healthBar;
 
     private final static int WIDTH = 90;
