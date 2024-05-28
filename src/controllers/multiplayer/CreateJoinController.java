@@ -48,7 +48,7 @@ public class CreateJoinController {
     public void switchToWaitingRoom(MouseEvent event) throws IOException {
         String username = showUsernameModal();
         if (username != null) {
-            waitingRoom = new WaitingRoom(false, username, 0 , 0, 0, 0);
+            waitingRoom = new WaitingRoom(false, username, 0 , 0, 0);
             ((Stage) ((Node) event.getSource()).getScene().getWindow()).setScene(waitingRoom.getScene());
         }
     }

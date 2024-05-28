@@ -22,13 +22,17 @@ public class WaitingRoom {
     private final static int WINDOW_WIDTH = 1280;
     private final static int WINDOW_HEIGHT = 720;
 
-    public WaitingRoom(boolean isServer, String username, int playerCount, int difficulty, int duration, int lives) throws IOException {
+    public WaitingRoom(boolean isServer, String username, int playerCount, int duration, int lives) throws IOException {
         System.out.println("Lobby created");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("../../screens/multiplayer/WaitingRoom.fxml"));
         this.root = loader.load();
         this.scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
         this.controller = loader.getController();
         this.controller.setIsServer(isServer);
+        this.controller.setUsername(username);
+        this.controller.setPlayerCount(playerCount);
+        this.controller.setDuration(duration);
+        this.controller.setLives(lives);
 
         if (isServer) {
             this.chatServer = new ChatServer(new ServerSocket(1234), username);

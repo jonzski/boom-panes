@@ -2,21 +2,27 @@ package controllers.multiplayer;
 
 import classes.ChatClient;
 import classes.ChatServer;
+import classes.GameClient;
+import classes.GameServer;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import javafx.stage.Stage;
+import scenes.multiplayer.Room;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -38,9 +44,18 @@ public class WaitingRoomController implements Initializable {
     @FXML
     private ScrollPane chatScroll;
 
+    private GameServer gameServer;
+    private GameClient gameClient;
+
+    private Room room;
+
     private boolean isServer;
     private ChatServer chatServer;
     private ChatClient chatClient;
+    private String username;
+    private int playerCount;
+    private int duration;
+    private int lives;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -94,6 +109,22 @@ public class WaitingRoomController implements Initializable {
         Platform.runLater(() -> vbox.getChildren().add(hBox));
     }
 
+    private void startGame(MouseEvent event) {
+        try {
+            room = new Room(playerCount, duration, lives);
+            ((Stage) ((Node) event.getSource()).getScene().getWindow()).setScene(room.getScene());
+            if (isServer) {
+                gameServer = new GameServer(1234);
+                gameServer.startServer();
+            } else {
+                gameClient = new GameClient("localhost", 1234, room);
+                gameClient.start();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void setIsServer(boolean isServer) {
         this.isServer = isServer;
     }
@@ -110,6 +141,22 @@ public class WaitingRoomController implements Initializable {
         if (chatClient != null) {
             chatClient.listenForMessages(chatBox);
         }
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setPlayerCount(int playerCount) {
+        this.playerCount = playerCount;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
+
+    public void setLives(int lives) {
+        this.lives = lives;
     }
 
     public VBox getChatBox() {

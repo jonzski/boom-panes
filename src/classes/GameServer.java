@@ -1,51 +1,60 @@
 package classes;
 
-import javafx.scene.layout.VBox;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.ArrayList;
+import java.io.*;
+import java.net.*;
+import java.util.*;
+import java.util.concurrent.*;
 
 public class GameServer {
+    private final int port;
+    private final List<PlayerHandler> players = new CopyOnWriteArrayList<>();
     private ServerSocket serverSocket;
-    private static ArrayList<ClientHandler> clients = new ArrayList<>();
-    private String username;
 
-    public GameServer(ServerSocket serverSocket, String username) {
-        this.serverSocket = serverSocket;
-        this.username = username;
+    public GameServer(int port) {
+        this.port = port;
     }
 
-    public static void broadcast(String message) {
-        for (ClientHandler client : clients) {
-            client.sendMessage(message);
-        }
+    public void startServer() {
+        System.out.println("Server started on port " + port);
+        new Thread(() -> {
+            try {
+                while (!serverSocket.isClosed()) {
+                    Socket socket = serverSocket.accept();
+                    PlayerHandler playerHandler = new PlayerHandler(socket);
+                    players.add(playerHandler);
+                    new Thread(playerHandler).start();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
 
-    private static class ClientHandler implements Runnable {
+    private class PlayerHandler implements Runnable {
         private Socket socket;
-        private PrintWriter out;
-        private BufferedReader in;
+        private ObjectOutputStream out;
+        private ObjectInputStream in;
+        private Player player;
 
-        public ClientHandler(Socket socket) {
+        public PlayerHandler(Socket socket) throws IOException {
             this.socket = socket;
+            this.out = new ObjectOutputStream(socket.getOutputStream());
+            this.in = new ObjectInputStream(socket.getInputStream());
         }
 
         @Override
         public void run() {
             try {
-                out = new PrintWriter(socket.getOutputStream(), true);
-                in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                String message;
-                while ((message = in.readLine()) != null) {
-                    System.out.println("Received: " + message);
-                    GameServer.broadcast(message);
+                while (true) {
+                    Object message = in.readObject();
+                    if (message instanceof Player) {
+                        player = (Player) message;
+                        broadcast(player);
+                    } else if (message instanceof String) {
+                        handleCommand((String) message);
+                    }
                 }
-            } catch (IOException e) {
+            } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             } finally {
                 try {
@@ -53,12 +62,22 @@ public class GameServer {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                players.remove(this);
             }
         }
 
-        public void sendMessage(String message) {
-            out.println(message);
+        private void handleCommand(String command) {
+            // Handle game-specific commands here
+        }
+
+        private void broadcast(Object message) {
+            for (PlayerHandler playerHandler : players) {
+                try {
+                    playerHandler.out.writeObject(message);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
-
 }

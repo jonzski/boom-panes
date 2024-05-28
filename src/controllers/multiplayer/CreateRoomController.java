@@ -38,7 +38,7 @@ public class CreateRoomController {
         System.out.println("Difficulty: " + difficulty.get(difficultyIndex));
         System.out.println("Duration: " + duration.get(durationIndex));
         System.out.println("No. of lives: " + lives.get(livesIndex));
-        waitingRoom = new WaitingRoom(true, username, pCount.get(pCountIndex), difficultyIndex+1, duration.get(durationIndex), lives.get(livesIndex));
+        waitingRoom = new WaitingRoom(true, username, pCount.get(pCountIndex), duration.get(durationIndex), lives.get(livesIndex));
         ((Stage) ((Node) event.getSource()).getScene().getWindow()).setScene(waitingRoom.getScene());
     }
 
