@@ -12,16 +12,17 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import scenes.Menu;
 import scenes.multiplayer.CreateRoom;
-import scenes.multiplayer.JoinRoom;
 import controllers.UsernameModalController;
+import scenes.multiplayer.WaitingRoom;
+
 
 import java.io.IOException;
 
 public class CreateJoinController {
 
     private CreateRoom createRoom;
-    private JoinRoom joinRoom;
     private Menu menu;
+    private WaitingRoom waitingRoom;
 
     private Image createRoomButton = new Image("assets/Buttons/createRoom.png");
     private Image createRoomHover = new Image("assets/Buttons/createRoomHover.png");
@@ -44,13 +45,14 @@ public class CreateJoinController {
         }
     }
 
-    public void switchToJoinRoom(MouseEvent event) throws IOException {
+    public void switchToWaitingRoom(MouseEvent event) throws IOException {
         String username = showUsernameModal();
         if (username != null) {
-            joinRoom = new JoinRoom(username);
-            ((Stage) ((Node) event.getSource()).getScene().getWindow()).setScene(joinRoom.getScene());
+            waitingRoom = new WaitingRoom(false, username, 0 , 0, 0, 0);
+            ((Stage) ((Node) event.getSource()).getScene().getWindow()).setScene(waitingRoom.getScene());
         }
     }
+
 
     public void switchToMenu(MouseEvent event) throws IOException{
         menu = new Menu();

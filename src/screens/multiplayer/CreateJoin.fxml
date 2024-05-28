@@ -28,7 +28,7 @@
             <Image url="@../../assets/Buttons/createRoom.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="120.0" fitWidth="555.0" layoutX="363.0" layoutY="443.0" fx:id="joinRoomButtonView" onMouseClicked="#switchToJoinRoom" onMouseEntered="#hoverJoinRoom" onMouseExited="#notHoverJoinRoom" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="120.0" fitWidth="555.0" layoutX="363.0" layoutY="443.0" fx:id="joinRoomButtonView" onMouseClicked="#switchToWaitingRoom" onMouseEntered="#hoverJoinRoom" onMouseExited="#notHoverJoinRoom" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../assets/Buttons/joinRoom.png" />
          </image>

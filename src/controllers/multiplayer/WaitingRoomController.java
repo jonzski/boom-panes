@@ -1,7 +1,7 @@
 package controllers.multiplayer;
 
-import classes.Client;
-import classes.Server;
+import classes.ChatClient;
+import classes.ChatServer;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -23,7 +23,9 @@ import java.util.ResourceBundle;
 
 public class WaitingRoomController implements Initializable {
 
+    @FXML
     public GridPane playersContainer;
+
     @FXML
     private Button buttonSend;
 
@@ -37,26 +39,12 @@ public class WaitingRoomController implements Initializable {
     private ScrollPane chatScroll;
 
     private boolean isServer;
-    private Server server;
-    private Client client;
+    private ChatServer chatServer;
+    private ChatClient chatClient;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         chatBox.heightProperty().addListener((observableValue, oldValue, newValue) -> chatScroll.setVvalue((Double) newValue));
-
-        if (isServer) {
-            if (server != null) {
-                server.receiveMessageFromClient(chatBox);
-            } else {
-                System.out.println("Server is null on receive message");
-            }
-        } else {
-            if (client != null) {
-                client.receiveMessageFromServer(chatBox);
-            } else {
-                System.out.println("Client is null on receive message");
-            }
-        }
 
         buttonSend.setOnAction(event -> sendMessage());
 
@@ -82,19 +70,10 @@ public class WaitingRoomController implements Initializable {
 
             hBox.getChildren().add(textFlow);
             chatBox.getChildren().add(hBox);
-
             if (isServer) {
-                if (server != null) {
-                    new Thread(() -> server.sendMessageToClient(message)).start();
-                } else {
-                    System.out.println("Server is null on send message");
-                }
+                new Thread(() -> chatServer.broadcastMessage(message)).start();
             } else {
-                if (client != null) {
-                    new Thread(() -> client.sendMessageToServer(message)).start();
-                } else {
-                    System.out.println("Client is null on send message");
-                }
+                new Thread(() -> chatClient.sendMessageToChat(message)).start();
             }
             chatField.clear();
         }
@@ -107,10 +86,11 @@ public class WaitingRoomController implements Initializable {
 
         Text text = new Text(message);
         TextFlow textFlow = new TextFlow(text);
-        textFlow.setStyle("-fx-color: rgb(239,242,255); -fx-background-color: rgb(101,101,101); -fx-background-radius: 20px;");
+        textFlow.setStyle("-fx-background-color: rgb(101,101,101); -fx-background-radius: 20px;");
         text.setFill(Color.color(0.934, 0.935, 0.996));
         textFlow.setPadding(new Insets(5, 10, 5, 10));
         hBox.getChildren().add(textFlow);
+
         Platform.runLater(() -> vbox.getChildren().add(hBox));
     }
 
@@ -118,21 +98,17 @@ public class WaitingRoomController implements Initializable {
         this.isServer = isServer;
     }
 
-    public void setServer(Server server) {
-        this.server = server;
-
-        Platform.runLater(()->playersContainer.getChildren().add(new Button()));
-        if (server != null) {
-            server.receiveMessageFromClient(chatBox);
+    public void setServer(ChatServer chatServer) {
+        this.chatServer = chatServer;
+        if (chatServer != null) {
+            chatServer.startServer(chatBox);
         }
     }
 
-    public void setClient(Client client) {
-        this.client = client;
-        Platform.runLater(()->playersContainer.getChildren().add(new TextField()));
-
-        if (client != null) {
-            client.receiveMessageFromServer(chatBox);
+    public void setClient(ChatClient chatClient) {
+        this.chatClient = chatClient;
+        if (chatClient != null) {
+            chatClient.listenForMessages(chatBox);
         }
     }
 

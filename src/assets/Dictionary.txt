@@ -37465,7 +37465,7 @@ clickless
 clicky
 Clidastes
 cliency
-client
+chatClient
 clientage
 cliental
 cliented
@@ -179054,7 +179054,7 @@ servation
 serve
 servente
 serventism
-server
+chatServer
 servery
 servet
 Servetian

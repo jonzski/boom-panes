@@ -1,6 +1,6 @@
 package scenes.multiplayer;
-import classes.Client;
-import classes.Server;
+import classes.ChatClient;
+import classes.ChatServer;
 import controllers.multiplayer.WaitingRoomController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -16,8 +16,8 @@ public class WaitingRoom {
     private Scene scene;
     private WaitingRoomController controller;
 
-    private Server server;
-    private Client client;
+    private ChatServer chatServer;
+    private ChatClient chatClient;
 
     private final static int WINDOW_WIDTH = 1280;
     private final static int WINDOW_HEIGHT = 720;
@@ -31,12 +31,12 @@ public class WaitingRoom {
         this.controller.setIsServer(isServer);
 
         if (isServer) {
-            this.server = new Server(new ServerSocket(1234), username);
-            this.controller.setServer(server);
-            this.server.startServer(this.controller.getChatBox());
+            this.chatServer = new ChatServer(new ServerSocket(1234), username);
+            this.controller.setServer(chatServer);
+            this.chatServer.startServer(this.controller.getChatBox());
         } else {
-            this.client = new Client(new Socket("localhost", 1234), username);
-            this.controller.setClient(client);
+            this.chatClient = new ChatClient(new Socket("localhost", 1234), username);
+            this.controller.setClient(chatClient);
         }
     }
 
