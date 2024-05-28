@@ -3,17 +3,16 @@ package classes;
 import java.io.*;
 import java.net.*;
 import java.util.*;
-import java.util.concurrent.*;
 
 public class GameServer {
     private final int port;
-    private final List<PlayerHandler> players = new CopyOnWriteArrayList<>();
+    private final ArrayList<PlayerHandler> players = new ArrayList<>();
     private ServerSocket serverSocket;
 
     public GameServer(int port) {
         this.port = port;
     }
-    
+
     public void startServer() {
         System.out.println("Game Server started on port " + port);
         new Thread(() -> {

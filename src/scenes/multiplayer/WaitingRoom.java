@@ -35,9 +35,10 @@ public class WaitingRoom {
         this.controller.setLives(lives);
 
         if (isServer) {
-            this.chatServer = new ChatServer(new ServerSocket(1234), username);
+            this.chatServer = new ChatServer(new ServerSocket(1234), username, this.controller);
             this.controller.setServer(chatServer);
             this.chatServer.startServer(this.controller.getChatBox());
+            this.controller.addPlayer(username);
         } else {
             this.chatClient = new ChatClient(new Socket("localhost", 1234), username);
             this.controller.setClient(chatClient);

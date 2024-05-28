@@ -13,6 +13,8 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
@@ -22,15 +24,13 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
+import scenes.multiplayer.CreateJoin;
 import scenes.multiplayer.Room;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class WaitingRoomController implements Initializable {
-
-    @FXML
-    public GridPane playersContainer;
 
     @FXML
     private Button buttonSend;
@@ -43,6 +43,9 @@ public class WaitingRoomController implements Initializable {
 
     @FXML
     private ScrollPane chatScroll;
+
+    @FXML
+    private GridPane playersGrid;
 
     private GameServer gameServer;
     private GameClient gameClient;
@@ -94,22 +97,47 @@ public class WaitingRoomController implements Initializable {
         }
     }
 
-    public static void addMessage(String message, VBox vbox) {
-        HBox hBox = new HBox();
-        hBox.setAlignment(Pos.CENTER_LEFT);
-        hBox.setPadding(new Insets(5, 5, 5 , 10));
+    public void addPlayer(String playerName) {
+        Platform.runLater(() -> {
+            Image player = new Image("assets/player-head.png");
+            ImageView imageView = new ImageView(player);
+            imageView.setFitHeight(30);
+            imageView.setFitWidth(30);
 
-        Text text = new Text(message);
-        TextFlow textFlow = new TextFlow(text);
-        textFlow.setStyle("-fx-background-color: rgb(101,101,101); -fx-background-radius: 20px;");
-        text.setFill(Color.color(0.934, 0.935, 0.996));
-        textFlow.setPadding(new Insets(5, 10, 5, 10));
-        hBox.getChildren().add(textFlow);
+            Text text = new Text(playerName);
+            text.setFill(Color.color(0.934, 0.935, 0.996));
+            text.setStyle("-fx-background-color: rgb(15,125, 242); -fx-background-radius: 20px;");
 
-        Platform.runLater(() -> vbox.getChildren().add(hBox));
+            VBox playerBox = new VBox(5);
+            playerBox.getChildren().addAll(imageView, text);
+            playersGrid.add(playerBox, 0, playersGrid.getRowCount());
+        });
+
+        if (isServer) {
+            new Thread(() -> chatServer.broadcastMessage(playerName + " has joined the chat!", true)).start();
+        } else {
+            new Thread(() -> chatClient.sendMessageToChat(playerName + " has joined the chat!")).start();
+        }
     }
 
-    private void startGame(MouseEvent event) {
+    public static void addMessage(String message, VBox vbox) {
+        Platform.runLater(() -> {
+            HBox hBox = new HBox();
+            hBox.setAlignment(Pos.CENTER_LEFT);
+            hBox.setPadding(new Insets(5, 5, 5 , 10));
+
+            Text text = new Text(message);
+            TextFlow textFlow = new TextFlow(text);
+            textFlow.setStyle("-fx-background-color: rgb(101,101,101); -fx-background-radius: 20px;");
+            text.setFill(Color.color(0.934, 0.935, 0.996));
+            textFlow.setPadding(new Insets(5, 10, 5, 10));
+            hBox.getChildren().add(textFlow);
+
+            vbox.getChildren().add(hBox);
+        });
+    }
+
+    public void startGame(MouseEvent event) {
         try {
             room = new Room(playerCount, duration, lives);
             ((Stage) ((Node) event.getSource()).getScene().getWindow()).setScene(room.getScene());
@@ -120,6 +148,20 @@ public class WaitingRoomController implements Initializable {
                 gameClient = new GameClient("localhost", 1234, room);
                 gameClient.start();
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void returnRoomSelection(MouseEvent event) {
+        try {
+            if (isServer) {
+                chatServer.closeServer();
+            } else {
+                chatClient.closeConnection();
+            }
+            CreateJoin createJoin = new CreateJoin();
+            ((Stage) ((Node) event.getSource()).getScene().getWindow()).setScene(createJoin.getScene());
         } catch (Exception e) {
             e.printStackTrace();
         }

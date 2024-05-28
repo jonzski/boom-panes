@@ -16,10 +16,12 @@ public class ChatServer {
     private ArrayList<ClientHandler> clients = new ArrayList<>();
     private VBox chatBox;
     private String username;
+    private WaitingRoomController controller;
 
-    public ChatServer(ServerSocket serverSocket, String username) {
+    public ChatServer(ServerSocket serverSocket, String username, WaitingRoomController controller) {
         this.serverSocket = serverSocket;
         this.username = username;
+        this.controller = controller;
     }
 
     public void startServer(VBox chatBox) {
@@ -32,6 +34,8 @@ public class ChatServer {
                     ClientHandler clientHandler = new ClientHandler(socket, this);
                     clients.add(clientHandler);
                     new Thread(clientHandler).start();
+                    broadcastMessage(username + " has joined the chat!", true); // Notify all clients
+                    controller.addPlayer(username);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -45,6 +49,17 @@ public class ChatServer {
         }
         if (!isFromServer) {
             WaitingRoomController.addMessage(message, chatBox);
+        }
+    }
+
+    public void closeServer() {
+        try {
+            serverSocket.close();
+            for (ClientHandler client : clients) {
+                client.close();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
