@@ -57,6 +57,7 @@ public class Room extends AnimationTimer {
 
     private Label perkLabel;
     private Label currentAnswer;
+    private Label yourTurn;
 
     public Room(int playerCount, int difficulty, int duration, int health) throws IOException {
 
@@ -68,13 +69,19 @@ public class Room extends AnimationTimer {
         this.answerField = new TextField();
         this.perkLabel = new Label();
         this.currentAnswer = new Label();
+        this.yourTurn = new Label();
 
-        this.perkLabel.setStyle("-fx-text-fill: white; -fx-font-family: 'Arial'; -fx-font-size: 20px;");
+        this.perkLabel.setStyle("-fx-text-fill: white; -fx-font-family: 'Montserrat SemiBold'; -fx-font-size: 20px;");
         this.perkLabel.setText("Perk: None");
+        this.perkLabel.setLayoutX(50);
+        this.perkLabel.setLayoutY(50);
+
+        this.yourTurn.setText("Enter your answer here: ");
+        this.yourTurn.setStyle("-fx-text-fill: white; -fx-font-family: 'Montserrat SemiBold'; -fx-font-size: 20px;");
 
         this.currentAnswer.setLayoutX(50);
         this.currentAnswer.setLayoutY(WINDOW_HEIGHT/2);
-        this.currentAnswer.setStyle("-fx-text-fill: white; -fx-font-family: 'Arial'; -fx-font-size: 20px;");
+        this.currentAnswer.setStyle("-fx-text-fill: white; -fx-font-family: 'Montserrat SemiBold'; -fx-font-size: 20px;");
 
         this.scene = new Scene(root, Room.WINDOW_WIDTH, Room.WINDOW_HEIGHT);
         this.root.getChildren().add(this.canvas);
@@ -82,9 +89,14 @@ public class Room extends AnimationTimer {
         this.root.getChildren().add(this.answerField);
         this.root.getChildren().add(this.perkLabel);
         this.root.getChildren().add(this.currentAnswer);
+        this.root.getChildren().add(this.yourTurn);
+
+        this.yourTurn.setLayoutY(WINDOW_HEIGHT-80);
+        this.yourTurn.setLayoutX(50);
 
         this.answerField.setLayoutY(WINDOW_HEIGHT-50);
         this.answerField.setLayoutX(50);
+        this.answerField.setStyle("-fx-background-color: #f0f0f0; -fx-border-color: #ccc; -fx-border-radius: 5px; -fx-padding: 5px; -fx-font-family: Arial; -fx-font-size: 14px;");
 
         this.timer = new GameTimer();
         this.waitTimer = new GameTimer();
@@ -237,8 +249,10 @@ public class Room extends AnimationTimer {
 
         if (players.get(currentPlayerIndex) instanceof Bot) {
             answerField.setVisible(false);
+            yourTurn.setVisible(false);
         } else {
             answerField.setVisible(true);
+            yourTurn.setVisible(true);
         }
 
         if(timer.getElapsedTimeSeconds() < 0.18) System.out.println(players.get(currentPlayerIndex).getName() +"s turn!");
