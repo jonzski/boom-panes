@@ -26,7 +26,6 @@ public class ChatServer {
 
     public void startServer(VBox chatBox) {
         this.chatBox = chatBox;
-        System.out.println("Server started as " + username + " on port " + serverSocket.getLocalPort());
         new Thread(() -> {
             try {
                 while (!serverSocket.isClosed()) {

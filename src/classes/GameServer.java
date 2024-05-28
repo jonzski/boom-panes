@@ -1,42 +1,52 @@
 package classes;
 
 import java.io.*;
-import java.net.*;
-import java.util.*;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.ArrayList;
 
 public class GameServer {
-    private final int port;
-    private final ArrayList<PlayerHandler> players = new ArrayList<>();
     private ServerSocket serverSocket;
+    private ArrayList<ClientHandler> clients = new ArrayList<>();
+    private int playerCount;
+    private int duration;
+    private int lives;
 
-    public GameServer(int port) {
-        this.port = port;
+    public GameServer(int port, int playerCount, int duration, int lives) throws IOException {
+        this.playerCount = playerCount;
+        this.duration = duration;
+        this.lives = lives;
+        serverSocket = new ServerSocket(port);
     }
 
-    public void startServer() {
-        System.out.println("Game Server started on port " + port);
-        new Thread(() -> {
-            try {
-                while (!serverSocket.isClosed()) {
-                    Socket socket = serverSocket.accept();
-                    PlayerHandler playerHandler = new PlayerHandler(socket);
-                    players.add(playerHandler);
-                    new Thread(playerHandler).start();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
+    public void start() {
+        try {
+            while (true) {
+                Socket clientSocket = serverSocket.accept();
+                ClientHandler clientHandler = new ClientHandler(clientSocket, this);
+                clients.add(clientHandler);
+                new Thread(clientHandler).start();
             }
-        }).start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    private class PlayerHandler implements Runnable {
+    public synchronized void broadcast(Player player) {
+        for (ClientHandler client : clients) {
+            client.send(player);
+        }
+    }
+
+    private class ClientHandler implements Runnable {
         private Socket socket;
         private ObjectOutputStream out;
         private ObjectInputStream in;
-        private Player player;
+        private GameServer server;
 
-        public PlayerHandler(Socket socket) throws IOException {
+        public ClientHandler(Socket socket, GameServer server) throws IOException {
             this.socket = socket;
+            this.server = server;
             this.out = new ObjectOutputStream(socket.getOutputStream());
             this.in = new ObjectInputStream(socket.getInputStream());
         }
@@ -45,37 +55,32 @@ public class GameServer {
         public void run() {
             try {
                 while (true) {
-                    Object message = in.readObject();
-                    if (message instanceof Player) {
-                        player = (Player) message;
-                        broadcast(player);
-                    } else if (message instanceof String) {
-                        handleCommand((String) message);
+                    Object obj = in.readObject();
+                    if (obj instanceof Player) {
+                        Player player = (Player) obj;
+                        server.broadcast(player);
                     }
                 }
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
+                clients.remove(this);
             } finally {
                 try {
+                    in.close();
+                    out.close();
                     socket.close();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                players.remove(this);
             }
         }
 
-        private void handleCommand(String command) {
-            // Handle game-specific commands here
-        }
-
-        private void broadcast(Object message) {
-            for (PlayerHandler playerHandler : players) {
-                try {
-                    playerHandler.out.writeObject(message);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+        public void send(Player player) {
+            try {
+                out.writeObject(player);
+                out.flush();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }

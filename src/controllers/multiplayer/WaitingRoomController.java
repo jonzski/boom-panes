@@ -27,6 +27,7 @@ import javafx.stage.Stage;
 import scenes.multiplayer.CreateJoin;
 import scenes.multiplayer.Room;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -47,8 +48,13 @@ public class WaitingRoomController implements Initializable {
     @FXML
     private GridPane playersGrid;
 
+    @FXML
+    private ImageView startButton;
+
+    @FXML
+    private ImageView backButton;
+
     private GameServer gameServer;
-    private GameClient gameClient;
 
     private Room room;
 
@@ -71,6 +77,7 @@ public class WaitingRoomController implements Initializable {
                 sendMessage();
             }
         });
+
     }
 
     private void sendMessage() {
@@ -124,7 +131,7 @@ public class WaitingRoomController implements Initializable {
         Platform.runLater(() -> {
             HBox hBox = new HBox();
             hBox.setAlignment(Pos.CENTER_LEFT);
-            hBox.setPadding(new Insets(5, 5, 5 , 10));
+            hBox.setPadding(new Insets(5, 5, 5, 10));
 
             Text text = new Text(message);
             TextFlow textFlow = new TextFlow(text);
@@ -140,19 +147,29 @@ public class WaitingRoomController implements Initializable {
     public void startGame(MouseEvent event) {
         try {
             room = new Room(playerCount, duration, lives);
-            ((Stage) ((Node) event.getSource()).getScene().getWindow()).setScene(room.getScene());
             if (isServer) {
-                gameServer = new GameServer(1234);
-                gameServer.startServer();
+                new Thread(() -> {
+                    try {
+                        gameServer = new GameServer(1234, playerCount, duration, lives);
+                        gameServer.start();
+                        Platform.runLater(() -> {
+                            ((Stage) ((Node) event.getSource()).getScene().getWindow()).setScene(room.getScene());
+                        });
+                        GameClient gameClient = new GameClient("localhost", 1234, room);
+                        gameClient.start();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }).start();
             } else {
-                gameClient = new GameClient("localhost", 1234, room);
+                GameClient gameClient = new GameClient("localhost", 1234, room);
                 gameClient.start();
+                ((Stage) ((Node) event.getSource()).getScene().getWindow()).setScene(room.getScene());
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
     public void returnRoomSelection(MouseEvent event) {
         try {
             if (isServer) {

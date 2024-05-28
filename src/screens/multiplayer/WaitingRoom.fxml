@@ -36,12 +36,12 @@
          </content>
       </ScrollPane>
       <Button fx:id="buttonSend" layoutX="1155.0" layoutY="628.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="81.0" text="Send" />
-      <ImageView fitHeight="42.0" fitWidth="183.0" layoutX="689.0" layoutY="630.0" onMouseClicked="#startGame" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="startButton" fitHeight="42.0" fitWidth="183.0" layoutX="689.0" layoutY="630.0" onMouseClicked="#startGame" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../assets/Buttons/start.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="42.0" fitWidth="183.0" layoutX="54.0" layoutY="628.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="backButton" fitHeight="42.0" fitWidth="183.0" layoutX="54.0" layoutY="628.0" onMouseClicked="#returnRoomSelection" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../assets/Buttons/back.png" />
          </image>

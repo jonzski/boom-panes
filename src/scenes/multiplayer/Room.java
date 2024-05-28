@@ -1,9 +1,6 @@
 package scenes.multiplayer;
 
-import classes.Bomb;
-import classes.GameClient;
-import classes.GameTimer;
-import classes.Player;
+import classes.*;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -65,6 +62,17 @@ public class Room extends AnimationTimer {
 
         this.client = new GameClient("localhost", 1234, this);
         this.client.start();
+
+        new Thread(() -> {
+            while (true) {
+                try {
+                    Player player = (Player) client.in.readObject();
+                    updatePlayer(player);
+                } catch (IOException | ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 
     private void initializeLobbyPlayers(int playerCount) {
@@ -165,7 +173,8 @@ public class Room extends AnimationTimer {
             if (players.get(currentPlayerIndex).isDead()) {
                 players.remove(currentPlayerIndex);
                 if (players.size() == 1) endGame();
-            } else {
+            }
+            else {
                 currentPlayerIndex++;
             }
             return;

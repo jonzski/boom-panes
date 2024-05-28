@@ -1,55 +1,72 @@
 package classes;
 
+import javafx.application.Platform;
+import javafx.stage.Stage;
 import scenes.multiplayer.Room;
 
 import java.io.*;
-import java.net.*;
+import java.net.Socket;
 
 public class GameClient {
-    private final String host;
-    private final int port;
     private Socket socket;
     private ObjectOutputStream out;
-    private ObjectInputStream in;
+    public ObjectInputStream in;
     private Room room;
 
-    public GameClient(String host, int port, Room room) {
-        this.host = host;
-        this.port = port;
+    public GameClient(String host, int port, Room room) throws IOException {
+        this.socket = new Socket(host, port);
         this.room = room;
+        this.out = new ObjectOutputStream(socket.getOutputStream());
+        this.in = new ObjectInputStream(socket.getInputStream());
     }
 
-    public void start() throws IOException {
-        socket = new Socket(host, port);
-        out = new ObjectOutputStream(socket.getOutputStream());
-        in = new ObjectInputStream(socket.getInputStream());
-
-        new Thread(new Listener()).start();
-    }
-
-    public void send(Object message) throws IOException {
-        out.writeObject(message);
-    }
-
-    private class Listener implements Runnable {
-        @Override
-        public void run() {
+    public void start() {
+        new Thread(() -> {
             try {
                 while (true) {
-                    Object message = in.readObject();
-                    if (message instanceof Player) {
-                        room.updatePlayer((Player) message);
-                    } else if (message instanceof String) {
-                        handleCommand((String) message);
+                    Object obj = in.readObject();
+                    if (obj instanceof Player) {
+                        Player player = (Player) obj;
+                        Platform.runLater(() -> room.updatePlayer(player));
                     }
                 }
             } catch (IOException | ClassNotFoundException e) {
+                try {
+                    closeConnection();
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
                 e.printStackTrace();
             }
-        }
+        }).start();
+    }
 
-        private void handleCommand(String command) {
-            // Handle game-specific commands here
+    public void connect(String hostname, int port, Room room) {
+        try {
+            Socket socket = new Socket(hostname, port);
+            ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+            ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+
+            // Send a message to the server to indicate that the client has connected
+            out.writeObject("Client connected");
+
+            // Change the room scene
+            Platform.runLater(() -> {
+                ((Stage) room.getScene().getWindow()).setScene(room.getScene());
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+    }
+
+    public void send(Player player) throws IOException {
+        out.writeObject(player);
+        out.flush();
+    }
+
+    public void closeConnection() throws IOException {
+        in.close();
+        out.close();
+        socket.close();
     }
 }
