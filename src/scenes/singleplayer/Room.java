@@ -1,15 +1,16 @@
 package scenes.singleplayer;
 
-import classes.Bomb;
-import classes.Bot;
-import classes.GameTimer;
-import classes.Player;
+import classes.*;
 import javafx.animation.AnimationTimer;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
@@ -54,16 +55,37 @@ public class Room extends AnimationTimer {
     private final Image background = new Image("assets/Backgrounds/pxsprite-space.gif");
     private String playerAnswer;
 
+    private Label perkLabel;
+    private Label currentAnswer;
+
     public Room(int playerCount, int difficulty, int duration, int health) throws IOException {
 
         this.canvas = new Canvas(Room.WINDOW_WIDTH, Room.WINDOW_HEIGHT);
         this.canvas = new Canvas(Room.WINDOW_WIDTH, Room.WINDOW_HEIGHT);
         this.gc = this.canvas.getGraphicsContext2D();
         this.root = new Group();
+
         this.answerField = new TextField();
+        this.perkLabel = new Label();
+        this.currentAnswer = new Label();
+
+        this.perkLabel.setStyle("-fx-text-fill: white; -fx-font-family: 'Arial'; -fx-font-size: 20px;");
+        this.perkLabel.setText("Perk: None");
+
+        this.currentAnswer.setLayoutX(50);
+        this.currentAnswer.setLayoutY(WINDOW_HEIGHT/2);
+        this.currentAnswer.setStyle("-fx-text-fill: white; -fx-font-family: 'Arial'; -fx-font-size: 20px;");
+
         this.scene = new Scene(root, Room.WINDOW_WIDTH, Room.WINDOW_HEIGHT);
         this.root.getChildren().add(this.canvas);
+
         this.root.getChildren().add(this.answerField);
+        this.root.getChildren().add(this.perkLabel);
+        this.root.getChildren().add(this.currentAnswer);
+
+        this.answerField.setLayoutY(WINDOW_HEIGHT-50);
+        this.answerField.setLayoutX(50);
+
         this.timer = new GameTimer();
         this.waitTimer = new GameTimer();
 
@@ -138,14 +160,20 @@ public class Room extends AnimationTimer {
         int percentage = random.nextInt(101);
         if (percentage > 98) {
             this.roundPerk = new Perk("bomb-them-all");
+            this.perkLabel.setText("Perk: bomb-them-all");
         }
         else if (percentage > 95) {
             this.roundPerk =  new Perk("defused");
+            this.perkLabel.setText("Perk: defused!");
         }
         else if(percentage > 90) {
             this.roundPerk =  new Perk("slow-motion");
+            this.perkLabel.setText("Perk: slow-motion");
         }
-        else {this.roundPerk = null;}
+        else {
+            this.roundPerk = null;
+            this.perkLabel.setText("Perk:None");
+        }
     }
 
     @Override
@@ -201,13 +229,21 @@ public class Room extends AnimationTimer {
         isRunning = false;
     }
 
+
+
     private void simulateAnswer() {
 //        SHOULD BE FIRST TO FIX INDEXING
         currentPlayerIndex = currentPlayerIndex % players.size();
 
+        if (players.get(currentPlayerIndex) instanceof Bot) {
+            answerField.setVisible(false);
+        } else {
+            answerField.setVisible(true);
+        }
+
         if(timer.getElapsedTimeSeconds() < 0.18) System.out.println(players.get(currentPlayerIndex).getName() +"s turn!");
-//        if (players.get(currentPlayerIndex).getPerk() != null)
-//            System.out.println(players.get(currentPlayerIndex).getName() + " has a perk named: " + players.get(currentPlayerIndex).getPerk().name);
+        if (players.get(currentPlayerIndex).getPerk() != null)
+            System.out.println(players.get(currentPlayerIndex).getName() + " has a perk named: " + players.get(currentPlayerIndex).getPerk().name);
         String bufferPlayerAnswer = answerField.getText();
         // if bots turn and is thinking, do nothing
         if (players.get(currentPlayerIndex) instanceof Bot && waitTimer.getElapsedTimeSeconds() < botsThinkingTime) {
@@ -245,6 +281,7 @@ public class Room extends AnimationTimer {
         // if currentPlayer is a Bot
         if (players.get(currentPlayerIndex) instanceof Bot currentBot) {
             String answer = currentBot.simulateAnswer(bomb);
+            this.currentAnswer.setText(answer);
             result = currentBot.answer(bomb, answer);
             // reset wait timer since bot already answered
             waitTimer.reset();
@@ -258,6 +295,7 @@ public class Room extends AnimationTimer {
             answerField.setOnKeyPressed(event -> {
                 if (event.getCode() == KeyCode.ENTER) {
                     this.playerAnswer = bufferPlayerAnswer;
+                    this.currentAnswer.setText(bufferPlayerAnswer);
                 }
 
                 else if (event.getCode() == KeyCode.TAB) {
