@@ -7,12 +7,12 @@ import java.util.ArrayList;
 
 public class Bot extends Player{
 
-    private int difficulty;
+    private final int difficulty;
     private int health;
     private String name;
     private Boolean isDead;
 
-    private final static Image HEAD = new Image("assets/player-head.png");
+    private final static Image HEAD = new Image("assets/pc.png");
 
     private final static int WIDTH = 200;
     private final static int HEIGHT = 200;
